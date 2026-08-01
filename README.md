@@ -8,7 +8,7 @@ Each skill is a complete, repeatable workflow — the same processes we run for 
 
 | Skill | What it does | Video |
 |---|---|---|
-| [user-review-report](skills/user-review-report/) | Mines a brand's customer reviews across Trustpilot, regional review platforms, Reddit, and editorial press, then turns the patterns into ad copy direction, a voice-of-customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. | Coming soon |
+| [user-review-report](skills/user-review-report/) | Mines a brand's customer reviews across Trustpilot, regional review platforms, Reddit, and editorial press, then turns the patterns into ad copy direction, a voice-of-customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. Got Google Ads connected? It pulls your live ad copy and grades every headline against what customers actually say (a pasted export works too). | Coming soon |
 
 More skills are added over time — watch the [Big Flare YouTube channel](https://www.youtube.com/channel/UCKEZmHEEOMuvT2PBU3owpQA) to see each one in action when it lands.
 

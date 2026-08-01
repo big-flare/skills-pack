@@ -1,7 +1,7 @@
 ---
 name: user-review-report
-description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
-version: 1.3.0
+description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. If Google Ads is connected it pulls the live ad copy automatically (or accepts a pasted/uploaded export) and grades every headline against what customers actually say. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
+version: 1.4.0
 pack: big-flare-skills-pack
 ---
 
@@ -18,9 +18,28 @@ Ask the user for (don't proceed until you have the first three):
 1. **Brand name** and **website**
 2. **Main market** (country — this decides which review platforms matter)
 3. **Product category** (what they sell, roughly)
-4. *Optional:* known review platforms, current ad headlines/descriptions (pasted in), competitor names, a specific question they want answered
+4. *Optional:* known review platforms, competitor names, a specific question they want answered
+5. **Current ad copy** — see the three paths below. Worth 30 seconds of setup: it upgrades the gap analysis and the opportunity map from inferred to exact.
 
-If the user has a Google Ads integration connected, offer to pull their live headlines/descriptions instead of asking for a paste. If they have neither, skip the gap analysis section rather than guessing.
+### Current ad copy — three paths
+
+In order of preference:
+
+1. **Google Ads connected.** If a Google Ads integration/tool is available in the session, use it — confirm the right account with the user, then pull every enabled responsive search ad's headlines and descriptions with campaign and ad group names. Example GAQL:
+   ```
+   SELECT campaign.name, ad_group.name,
+          ad_group_ad.ad.responsive_search_ad.headlines,
+          ad_group_ad.ad.responsive_search_ad.descriptions
+   FROM ad_group_ad
+   WHERE ad_group_ad.status = 'ENABLED' AND campaign.status = 'ENABLED'
+     AND ad_group.status = 'ENABLED'
+     AND ad_group_ad.ad.type = 'RESPONSIVE_SEARCH_AD'
+   ```
+   If asset performance labels come back with the headlines (`assetPerformanceLabel`: LOW/GOOD/BEST), keep them — they enable an extra cross-reference in Step 4.
+2. **Manual upload or paste.** No integration? Ask the user to either paste their headlines and descriptions, or upload an export — the Google Ads UI's Ads download (CSV) and Google Ads Editor exports both work. Accept any reasonable format and extract the headline/description texts plus campaign/ad group names where present.
+3. **Neither.** Skip the gap-analysis section rather than guessing. The opportunity map falls back to the brand's observed public marketing (see Step 5).
+
+**Normalise, then forget the source.** Whichever path supplied the data, reduce it to one inventory before analysis: each unique headline and description with (a) how many ads use it, (b) which campaigns/ad groups (split brand vs non-brand where the naming makes it obvious), and (c) its performance label if available. From this point on, uploaded data and pulled data are treated identically.
 
 ## Step 2 — Scope the review landscape
 
@@ -65,7 +84,7 @@ Write the analysis file (`{brand}-user-review-analysis.md`) with these sections:
 1. **Header** — date, sources with review counts and how many you read, purpose.
 2. **What customers love** — themes RANKED by frequency, each with: estimated % of positive reviews, what specifically customers describe, and 5-10 verbatim quotes.
 3. **What frustrates customers** — ranked the same way. Distinguish product frictions (copy-relevant) from operational issues (shipping, support — flag but don't over-weight for messaging).
-4. **Gap analysis** (if current ad copy provided) — table: each live copy theme vs the review verdict. Flag: claims reviews dispute, themes reviews support that copy underuses, and proof language reviews offer that copy ignores.
+4. **Gap analysis** (if current ad copy was pulled or uploaded) — table: each live copy theme vs the review verdict, weighted by actual usage ("your most-used headline, in 6 ads, is also the most-disputed claim in negative reviews" is the highest-leverage finding this skill produces). Flag: claims reviews dispute (worst when in heavy rotation), themes reviews support that copy underuses (e.g. one headline for a top-3 theme), and proof language reviews offer that copy ignores. If performance labels came with the data, cross-reference them — a Google-rated LOW asset that reviews also dispute is a confident kill; a BEST-rated asset aligned with a top theme is the one to multiply. Split brand vs non-brand campaigns where distinguishable — non-brand copy is where VoC language matters most.
 5. **Voice-of-customer phrase bank** — real customer phrasings grouped by positioning angle, ready to adapt into headlines.
 6. **Copy recommendations by audience segment** — for each segment found in Step 3: what to lead with, an example headline direction, and why.
 7. **Landing page opportunities** — what the reviews say the LP should pre-empt, prove, or promise. Honest expectation-setting that reviews show converts (e.g. realistic timelines) belongs here.
