@@ -71,16 +71,31 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.01em; }
 .land-meta { font-size: 12.5px; color: var(--ink-3); text-align: right; }
 .land-note { font-size: 12px; color: var(--ink-3); margin-top: 12px; }
 /* Opportunity matrix (2×2) — only when gap analysis ran */
-.matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.mx-cell { border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-height: 110px; }
+.mx2-top { margin-left: 104px; }
+.mx2-xmaster { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); text-align: center; margin-bottom: 8px; }
+.mx2-xlabels { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 14px; }
+.mx2-xlabels span, .mx2-ylabels span { justify-self: center; background: var(--paper); border: 1px solid var(--border); border-radius: 999px; padding: 3px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.mx2-main { display: grid; grid-template-columns: 26px 78px 1fr; align-items: stretch; }
+.mx2-ymaster { display: flex; align-items: center; justify-content: center; }
+.mx2-ymaster span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }
+.mx2-ylabels { display: grid; grid-template-rows: 1fr 1fr; }
+.mx2-ylabels span { align-self: center; }
+.mx2-quad { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 18px; }
+.mx2-axis-v, .mx2-axis-h { position: absolute; background: var(--ink-3); opacity: 0.4; }
+.mx2-axis-v { left: 50%; top: -12px; bottom: -12px; width: 2px; margin-left: -1px; }
+.mx2-axis-h { top: 50%; left: -12px; right: -12px; height: 2px; margin-top: -1px; }
+.mx2-axis-v::before, .mx2-axis-v::after, .mx2-axis-h::before, .mx2-axis-h::after { content: ''; position: absolute; border: 5px solid transparent; }
+.mx2-axis-v::before { top: -8px; left: 50%; transform: translateX(-50%); border-bottom: 8px solid var(--ink-3); }
+.mx2-axis-v::after { bottom: -8px; left: 50%; transform: translateX(-50%); border-top: 8px solid var(--ink-3); }
+.mx2-axis-h::before { left: -8px; top: 50%; transform: translateY(-50%); border-right: 8px solid var(--ink-3); }
+.mx2-axis-h::after { right: -8px; top: 50%; transform: translateY(-50%); border-left: 8px solid var(--ink-3); }
+.mx-cell { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-height: 110px; position: relative; z-index: 1; }
 .mx-cell.gold { background: var(--accent-soft); border-color: var(--accent); }
-.mx-cell h4 { font-size: 13px; margin-bottom: 3px; }
+.mx-cell h4 { font-size: 13px; margin-bottom: 10px; }
 .mx-cell.gold h4 { color: var(--accent); }
-.mx-cell .mx-sub { font-size: 11px; color: var(--ink-3); margin-bottom: 10px; }
 .mx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .mx-chip { background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 500; }
 .mx-cell.gold .mx-chip { border-color: var(--accent); color: var(--accent); font-weight: 600; }
-.mx-axis { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); text-align: center; margin: 10px 0 6px; }
 
 .cover { text-align: center; padding: 40px 0 36px; }
 .cover .eyebrow { display: block; margin-bottom: 16px; }
@@ -307,33 +322,39 @@ td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
       </table>
     </div>
 
-    <!-- VISUAL: opportunity matrix. Place each major theme as a chip:
-         mention frequency (rows) × presence in current copy (columns).
-         If no ad copy was provided but you observed the brand's public marketing
-         claims during research, you may build this against those instead — relabel
-         the axes "current marketing" and state the basis in the section intro.
-         Drop it only when you have no honest read on the brand's current messaging. -->
-    <div class="mx-axis">Customers mention it often ↑</div>
+    <!-- VISUAL: opportunity matrix. Place each major theme as a chip by
+         mention frequency (rows) x presence in current marketing (columns).
+         With the gap analysis, base it on the ad copy; without ad copy, base it
+         on public marketing claims you actually observed and say so in the
+         section intro. Drop it only with no honest read on current messaging. -->
     <div class="viz-card">
-      <div class="matrix">
-        <div class="mx-cell gold">
-          <h4>Untapped gold</h4><div class="mx-sub">High mention · missing from copy</div>
-          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
-        </div>
-        <div class="mx-cell">
-          <h4>Double down</h4><div class="mx-sub">High mention · already in copy</div>
-          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
-        </div>
-        <div class="mx-cell">
-          <h4>Keep an eye on</h4><div class="mx-sub">Low mention · missing from copy</div>
-          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
-        </div>
-        <div class="mx-cell">
-          <h4>Question the spend</h4><div class="mx-sub">Low mention · already in copy</div>
-          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+      <div class="mx2-top">
+        <div class="mx2-xmaster">Current marketing</div>
+        <div class="mx2-xlabels"><span>Missing</span><span>Already in</span></div>
+      </div>
+      <div class="mx2-main">
+        <div class="mx2-ymaster"><span>Customers mention it</span></div>
+        <div class="mx2-ylabels"><span>Often</span><span>Not often</span></div>
+        <div class="mx2-quad">
+          <div class="mx2-axis-v"></div><div class="mx2-axis-h"></div>
+          <div class="mx-cell gold">
+            <h4>Untapped gold</h4>
+            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+          </div>
+          <div class="mx-cell">
+            <h4>Double down</h4>
+            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+          </div>
+          <div class="mx-cell">
+            <h4>Keep an eye on</h4>
+            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+          </div>
+          <div class="mx-cell">
+            <h4>Question the spend</h4>
+            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+          </div>
         </div>
       </div>
-      <div class="mx-axis" style="margin-top:14px;">← Missing from your copy&nbsp;&nbsp;·&nbsp;&nbsp;Already in your copy →</div>
     </div>
   </div>
 
