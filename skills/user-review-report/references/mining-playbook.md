@@ -34,6 +34,7 @@ Per-platform access quirks and sampling traps, learned the hard way. Read before
 - **Rate limiting (429):** back off and try the source again later in the session; if it persists, fall back to search-indexed content and disclose.
 - **Google reviews** have no reliable headless route — treat the star rating/count (visible in search) as context and don't plan on mining them.
 - **Summarised search results:** some environments' web search returns AI-summarised results rather than raw page snippets. Text harvested that way is paraphrase-risk — usable for theme identification, **never as a verbatim quote**. Only quote text you read on an actual page.
+- **Tool-assisted page reading:** if your fetch tool extracts/answers over the page rather than returning raw HTML, quotes it returns still count as "read" — but disclose the mechanism in your caveats, and prefer prompting it to "return the review texts verbatim" over asking for summaries.
 
 ## Sampling traps
 

@@ -1,7 +1,7 @@
 ---
 name: user-review-report
 description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. If Google Ads is connected it pulls the live ad copy automatically (or accepts a pasted/uploaded export) and grades every headline against what customers actually say. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
-version: 1.4.0
+version: 1.4.1
 pack: big-flare-skills-pack
 ---
 
@@ -35,11 +35,11 @@ In order of preference:
      AND ad_group.status = 'ENABLED'
      AND ad_group_ad.ad.type = 'RESPONSIVE_SEARCH_AD'
    ```
-   If asset performance labels come back with the headlines (`assetPerformanceLabel`: LOW/GOOD/BEST), keep them — they enable an extra cross-reference in Step 4.
+   If asset performance labels come back with the headlines (`assetPerformanceLabel`: LOW/GOOD/BEST), keep them — they enable an extra cross-reference in Step 4. Two realities of live pulls: (a) accounts with many RSAs return more data than fits in a tool result — expect to process the saved output with a small script, or page the query with `LIMIT`/campaign filters; (b) recently refreshed accounts return mostly PENDING labels — when few assets carry real labels, treat the label cross-reference as directional colour, not evidence, and say so.
 2. **Manual upload or paste.** No integration? Ask the user to either paste their headlines and descriptions, or upload an export — the Google Ads UI's Ads download (CSV) and Google Ads Editor exports both work. Accept any reasonable format and extract the headline/description texts plus campaign/ad group names where present.
 3. **Neither.** Skip the gap-analysis section rather than guessing. The opportunity map falls back to the brand's observed public marketing (see Step 5).
 
-**Normalise, then forget the source.** Whichever path supplied the data, reduce it to one inventory before analysis: each unique headline and description with (a) how many ads use it, (b) which campaigns/ad groups (split brand vs non-brand where the naming makes it obvious), and (c) its performance label if available. From this point on, uploaded data and pulled data are treated identically.
+**Normalise, then forget the source.** Whichever path supplied the data, reduce it to one inventory before analysis: each unique headline and description with (a) how many ads use it, (b) which campaigns/ad groups (split brand vs non-brand where the naming makes it obvious), and (c) its performance label if available. From this point on, uploaded data and pulled data are treated identically. Two normalisation rules: **merge near-identical variants into one theme** ("Fast Absorbing & Non Sticky" / "Non-Sticky & Easy To Apply" are one claim — gap verdicts apply to themes, not string variants, so report combined usage counts); and if the account spans **multiple markets**, keep everything in the inventory, note the split, and weight the gap analysis toward the user's stated main market.
 
 ## Step 2 — Scope the review landscape
 
@@ -102,6 +102,7 @@ Synthesis quality bar:
 
 Generate `{brand}-user-review-report.html` following `references/report-template.html` — it defines the structure (cover → stat row → executive summary → review landscape → message opportunity map → butterfly chart → loves → frustrations → gap table → phrase bank → segments → LP opportunities → don'ts → sources) and a neutral, professional design with a single token block.
 
+- **Assemble the report by splicing the template file programmatically** — copy the head, CSS, brand header, and footer verbatim with a script and generate only the content sections. Never retype the template by hand: the brand logo is a long base64 block that does not survive manual reproduction.
 - Keep the template's `:root` tokens unless the user asks for their brand colours — then swap only the token values.
 - Populate every section from the analysis file. The report is the shareable artifact; the markdown is the working file.
 - **The executive summary is ONE tight paragraph** (4-6 sentences): the dominant theme + its proof device, the top frictions, the single biggest opportunity. Resist the second paragraph — the visuals right below it carry the detail.
