@@ -33,9 +33,54 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--paper); color: var(--ink); line-height: 1.6; font-size: 16px;
 }
-.container { max-width: 1000px; margin: 0 auto; padding: 48px 24px 72px; }
+.container { max-width: 1000px; margin: 0 auto; padding: 28px 24px 72px; }
 h1, h2, h3 { line-height: 1.15; letter-spacing: -0.01em; }
 .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+
+/* ---- Brand header (keep intact — see footer note) ---- */
+.brand-bar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.brand-mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand-mark svg { display: block; }
+.brand-mark .brand-name { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; }
+.brand-bar .brand-tag { font-size: 12.5px; color: var(--ink-3); }
+.brand-bar .brand-tag a { color: var(--ink-2); font-weight: 600; text-decoration: none; }
+
+/* ---- Visuals ---- */
+.viz-card { background: var(--card); border-radius: var(--radius); padding: 26px 30px; box-shadow: var(--shadow); }
+.viz-title { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 18px; }
+/* Butterfly chart: loves extend right (--pos), frictions extend left (--accent) */
+.butterfly .axis-labels { display: grid; grid-template-columns: 1fr 150px 1fr; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.butterfly .axis-labels .neg { color: var(--accent); text-align: right; }
+.butterfly .axis-labels .pos { color: var(--pos); text-align: left; grid-column: 3; }
+.bf-row { display: grid; grid-template-columns: 1fr 150px 1fr; align-items: center; gap: 0; margin-bottom: 7px; }
+.bf-label { grid-column: 2; text-align: center; font-size: 12.5px; color: var(--ink-2); padding: 0 10px; line-height: 1.3; }
+.bf-left { grid-column: 1; grid-row: 1; display: flex; justify-content: flex-end; }
+.bf-right { grid-column: 3; grid-row: 1; }
+.bf-bar { height: 18px; border-radius: 4px; position: relative; }
+.bf-left .bf-bar { background: var(--accent); border-radius: 4px 0 0 4px; }
+.bf-right .bf-bar { background: var(--pos); border-radius: 0 4px 4px 0; }
+.bf-bar .bf-val { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10.5px; font-weight: 700; color: #fff; }
+.bf-left .bf-val { left: 6px; }
+.bf-right .bf-val { right: 6px; }
+/* Review landscape: one row per source, bar filled to rating/5 */
+.land-row { display: grid; grid-template-columns: 200px 1fr 130px; align-items: center; gap: 14px; margin-bottom: 10px; }
+.land-src { font-size: 13.5px; font-weight: 600; }
+.land-bar { height: 14px; background: var(--paper); border-radius: 999px; overflow: hidden; }
+.land-fill { height: 100%; border-radius: 999px; background: var(--pos); }
+.land-fill.own { background: var(--ink-3); } /* brand-controlled source — muted */
+.land-meta { font-size: 12.5px; color: var(--ink-3); text-align: right; }
+.land-note { font-size: 12px; color: var(--ink-3); margin-top: 12px; }
+/* Opportunity matrix (2×2) — only when gap analysis ran */
+.matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mx-cell { border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-height: 110px; }
+.mx-cell.gold { background: var(--accent-soft); border-color: var(--accent); }
+.mx-cell h4 { font-size: 13px; margin-bottom: 3px; }
+.mx-cell.gold h4 { color: var(--accent); }
+.mx-cell .mx-sub { font-size: 11px; color: var(--ink-3); margin-bottom: 10px; }
+.mx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mx-chip { background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 500; }
+.mx-cell.gold .mx-chip { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.mx-axis { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); text-align: center; margin: 10px 0 6px; }
 
 .cover { text-align: center; padding: 40px 0 36px; }
 .cover .eyebrow { display: block; margin-bottom: 16px; }
@@ -144,6 +189,18 @@ td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
 <body>
 <div class="container">
 
+  <!-- Brand header — keep intact, same as the footer credit -->
+  <div class="brand-bar">
+    <a class="brand-mark" href="https://bigflare.com">
+      <svg viewBox="0 0 64 64" width="30" height="30" role="img" aria-label="Big Flare">
+        <rect width="64" height="64" rx="14" fill="#dc2929"/>
+        <path fill="#ffffff" d="M33.6 11c1.2 7.4-2.3 12.2-5.8 16.6-3.1 3.9-5.8 7.8-5.8 13 0 7.6 5 12.4 12 12.4s12-4.8 12-12.4c0-5.6-2.9-9.6-5.8-13.5-1.7-2.3-3.4-4.6-4.4-7.3-.9 2.9-.4 5.4.5 7.9.8 2.3 1.7 4.6.6 7.1-1.7-.9-3-2.6-3.4-5.1-.7-4.7 1.5-9.9.1-18.7z"/>
+      </svg>
+      <span class="brand-name">Big Flare</span>
+    </a>
+    <span class="brand-tag">User Review Report · <a href="https://bigflare.com">bigflare.com</a></span>
+  </div>
+
   <div class="cover">
     <span class="eyebrow">Voice of customer research</span>
     <h1>What {Brand} customers <span class="hot">actually say</span></h1>
@@ -162,9 +219,45 @@ td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
     <div class="stat-card"><div class="num">~{N}</div><div class="lbl">Reviews read in full for this analysis</div></div>
   </div>
 
+  <!-- VISUAL: review landscape — one row per source, bar filled to rating/5.
+       Add class "own" to the fill for brand-controlled sources (own site) so they read as muted. -->
+  <div class="viz-card" style="margin-bottom: 48px;">
+    <div class="viz-title">The review landscape — where {Brand}'s reviews live</div>
+    <div class="land-row">
+      <span class="land-src">{Source}</span>
+      <div class="land-bar"><div class="land-fill" style="width:{rating/5*100}%"></div></div>
+      <span class="land-meta">{rating}/5 · {count} reviews</span>
+    </div>
+    <div class="land-row">
+      <span class="land-src">{Brand's own site}</span>
+      <div class="land-bar"><div class="land-fill own" style="width:{X}%"></div></div>
+      <span class="land-meta">{rating}/5 · {count} reviews</span>
+    </div>
+    <div class="land-note">{One line on skew — e.g. "Brand-controlled sources (grey) skew positive; independent platforms are the truer signal."}</div>
+  </div>
+
   <div class="exec">
     <span class="eyebrow">Executive summary</span>
     <p>{2 paragraphs: the dominant theme and its proof devices; the top friction themes; the biggest copy gap or untapped segment. Bold the load-bearing phrases.}</p>
+  </div>
+
+  <!-- VISUAL: butterfly chart — the whole report at a glance. One row per theme
+       (loves AND frictions, interleaved, sorted by frequency desc). Loves fill
+       .bf-right, frictions fill .bf-left; leave the other side empty. Bar width
+       = the theme's % of its review pool (scale so the largest bar ≈ 95%). -->
+  <div class="viz-card" style="margin-bottom: 56px;">
+    <div class="viz-title">What customers talk about — at a glance</div>
+    <div class="butterfly">
+      <div class="axis-labels"><span class="neg">Frustrations</span><span class="pos">What they love</span></div>
+      <div class="bf-row">
+        <div class="bf-right"><div class="bf-bar" style="width:{X}%"><span class="bf-val">~{X}%</span></div></div>
+        <span class="bf-label">{Love theme}</span>
+      </div>
+      <div class="bf-row">
+        <div class="bf-left"><div class="bf-bar" style="width:{X}%"><span class="bf-val">~{X}%</span></div></div>
+        <span class="bf-label">{Friction theme}</span>
+      </div>
+    </div>
   </div>
 
   <div class="section">
@@ -215,6 +308,31 @@ td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
           <tr><td>{missing theme}</td><td><span class="verdict-risk">Missing.</span> {why it should exist}</td></tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- VISUAL: opportunity matrix — ONLY when the gap analysis ran (drop with the section).
+         Place each major theme as a chip: mention frequency (rows) × presence in current copy (columns). -->
+    <div class="mx-axis">Customers mention it often ↑</div>
+    <div class="viz-card">
+      <div class="matrix">
+        <div class="mx-cell gold">
+          <h4>Untapped gold</h4><div class="mx-sub">High mention · missing from copy</div>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+        </div>
+        <div class="mx-cell">
+          <h4>Double down</h4><div class="mx-sub">High mention · already in copy</div>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+        </div>
+        <div class="mx-cell">
+          <h4>Keep an eye on</h4><div class="mx-sub">Low mention · missing from copy</div>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+        </div>
+        <div class="mx-cell">
+          <h4>Question the spend</h4><div class="mx-sub">Low mention · already in copy</div>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+        </div>
+      </div>
+      <div class="mx-axis" style="margin-top:14px;">← Missing from your copy&nbsp;&nbsp;·&nbsp;&nbsp;Already in your copy →</div>
     </div>
   </div>
 

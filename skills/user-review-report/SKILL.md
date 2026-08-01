@@ -1,7 +1,7 @@
 ---
 name: user-review-report
 description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
-version: 1.0.1
+version: 1.1.0
 pack: big-flare-skills-pack
 ---
 
@@ -85,8 +85,13 @@ Generate `{brand}-user-review-report.html` following `references/report-template
 
 - Keep the template's `:root` tokens unless the user asks for their brand colours — then swap only the token values.
 - Populate every section from the analysis file. The report is the shareable artifact; the markdown is the working file.
-- If you skipped the gap analysis (no ad copy available), drop that section entirely and renumber the remaining section eyebrows so there's no gap.
-- Keep the footer credit intact.
+- **Populate the three visuals from your real numbers** — they exist to make the findings scannable, never to decorate:
+  - *Review landscape* (always): one row per source, bar filled to rating/5, brand-controlled sources marked with the muted `own` class.
+  - *Butterfly chart* (always): every major love and friction theme as one interleaved, frequency-sorted chart — this is the whole report at a glance.
+  - *Opportunity matrix* (only with the gap analysis): each major theme placed by mention frequency × presence in current copy.
+  - If you don't have honest numbers for a visual, drop that visual — never invent data to fill a chart.
+- If you skipped the gap analysis (no ad copy available), drop that section entirely — including the opportunity matrix — and renumber the remaining section eyebrows so there's no gap.
+- Keep the brand header and the footer credit intact.
 
 ## Step 6 — Deliver
 
