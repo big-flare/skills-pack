@@ -6,7 +6,8 @@
 <title>{Brand} — User Review Analysis</title>
 <!--
   USER REVIEW REPORT TEMPLATE — Big Flare Skills Pack
-  Structure: cover → stat row → executive summary → what customers love →
+  Structure: cover → stat row → executive summary → review landscape →
+  message opportunity map → butterfly chart → what customers love →
   what frustrates → gap table → phrase bank → segments → LP opportunities →
   don'ts → sources → footer credit.
   To re-brand: change ONLY the :root token values below. Keep section structure.
@@ -231,6 +232,11 @@ td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
     <div class="stat-card"><div class="num">~{N}</div><div class="lbl">Reviews read in full for this analysis</div></div>
   </div>
 
+  <div class="exec">
+    <span class="eyebrow">Executive summary</span>
+    <p>{ONE tight paragraph, 4-6 sentences: the dominant theme + its proof device, the top frictions, and the single biggest gap or untapped opportunity. Bold the load-bearing phrases.}</p>
+  </div>
+
   <!-- VISUAL: review landscape — one row per source, bar filled to rating/5.
        Add class "own" to the fill for brand-controlled sources (own site) so they read as muted. -->
   <div class="viz-card" style="margin-bottom: 48px;">
@@ -248,9 +254,39 @@ td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
     <div class="land-note">{One line on skew — e.g. "Brand-controlled sources (grey) skew positive; independent platforms are the truer signal."}</div>
   </div>
 
-  <div class="exec">
-    <span class="eyebrow">Executive summary</span>
-    <p>{2 paragraphs: the dominant theme and its proof devices; the top friction themes; the biggest copy gap or untapped segment. Bold the load-bearing phrases.}</p>
+  <!-- VISUAL: opportunity matrix. Place each major theme as a chip by
+       mention frequency (rows) x presence in current marketing (columns).
+       With the gap analysis, base it on the ad copy; without ad copy, base it
+       on public marketing claims you actually observed and say so in the
+       section intro. Drop it only with no honest read on current messaging. -->
+  <div class="viz-card" style="margin-bottom: 48px;">
+    <div class="viz-title">Message opportunity map</div>
+    <div class="mx2-top">
+      <div class="mx2-xmaster">Current marketing</div>
+      <div class="mx2-xlabels"><span>Missing</span><span>Already in</span></div>
+    </div>
+    <div class="mx2-main">
+      <div class="mx2-ymaster"><span>Customers mention it</span></div>
+      <div class="mx2-ylabels"><span>Often</span><span>Not often</span></div>
+      <div class="mx2-quad">
+        <div class="mx2-axis-v"></div><div class="mx2-axis-h"></div>
+        <div class="mx-cell gold">
+          <h4>Untapped gold</h4>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+        </div>
+        <div class="mx-cell">
+          <h4>Double down</h4>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+        </div>
+        <div class="mx-cell">
+          <h4>Keep an eye on</h4>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+        </div>
+        <div class="mx-cell">
+          <h4>Question the spend</h4>
+          <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
+  >
+    <div class="land-note" style="margin-top:14px;">{Basis note — "Based on your current ad copy" or "Based on {Brand}'s public marketing claims observed during research."}</div>
   </div>
 
   <!-- VISUAL: butterfly chart — the whole report at a glance. One row per theme
@@ -322,40 +358,6 @@ td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
       </table>
     </div>
 
-    <!-- VISUAL: opportunity matrix. Place each major theme as a chip by
-         mention frequency (rows) x presence in current marketing (columns).
-         With the gap analysis, base it on the ad copy; without ad copy, base it
-         on public marketing claims you actually observed and say so in the
-         section intro. Drop it only with no honest read on current messaging. -->
-    <div class="viz-card">
-      <div class="mx2-top">
-        <div class="mx2-xmaster">Current marketing</div>
-        <div class="mx2-xlabels"><span>Missing</span><span>Already in</span></div>
-      </div>
-      <div class="mx2-main">
-        <div class="mx2-ymaster"><span>Customers mention it</span></div>
-        <div class="mx2-ylabels"><span>Often</span><span>Not often</span></div>
-        <div class="mx2-quad">
-          <div class="mx2-axis-v"></div><div class="mx2-axis-h"></div>
-          <div class="mx-cell gold">
-            <h4>Untapped gold</h4>
-            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
-          </div>
-          <div class="mx-cell">
-            <h4>Double down</h4>
-            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
-          </div>
-          <div class="mx-cell">
-            <h4>Keep an eye on</h4>
-            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
-          </div>
-          <div class="mx-cell">
-            <h4>Question the spend</h4>
-            <div class="mx-chips"><span class="mx-chip">{theme}</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="section">
