@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{Brand} — User Review Analysis</title>
+<!--
+  USER REVIEW REPORT TEMPLATE — Big Flare Skills Pack
+  Structure: cover → stat row → executive summary → what customers love →
+  what frustrates → gap table → phrase bank → segments → LP opportunities →
+  don'ts → sources → footer credit.
+  To re-brand: change ONLY the :root token values below. Keep section structure.
+-->
+<style>
+:root {
+  /* ==== brand tokens — swap these for your brand ==== */
+  --paper: #f6f6f4;        /* page background */
+  --card: #ffffff;         /* card background */
+  --ink: #1a1a1a;          /* headings / primary text */
+  --ink-2: #52525b;        /* body text */
+  --ink-3: #71717a;        /* captions / muted */
+  --accent: #b42318;       /* ONE focal accent — bars, ranks, risk flags */
+  --accent-soft: rgba(180, 35, 24, 0.08);
+  --pos: #1a7f64;          /* positive verdicts, phrase chips */
+  --pos-soft: rgba(26, 127, 100, 0.09);
+  --border: rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  /* ================================================== */
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--paper); color: var(--ink); line-height: 1.6; font-size: 16px;
+}
+.container { max-width: 1000px; margin: 0 auto; padding: 48px 24px 72px; }
+h1, h2, h3 { line-height: 1.15; letter-spacing: -0.01em; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+
+.cover { text-align: center; padding: 40px 0 36px; }
+.cover .eyebrow { display: block; margin-bottom: 16px; }
+.cover h1 { font-size: 44px; font-weight: 800; max-width: 720px; margin: 0 auto 14px; }
+.cover h1 .hot { color: var(--accent); }
+.cover .subtitle { color: var(--ink-2); font-size: 18px; max-width: 620px; margin: 0 auto 24px; }
+.meta-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.pill { background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 6px 16px; font-size: 13.5px; color: var(--ink-2); }
+.pill strong { color: var(--ink); }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 32px 0 48px; }
+.stat-card { background: var(--card); border-radius: var(--radius); padding: 24px 16px; text-align: center; box-shadow: var(--shadow); }
+.stat-card .num { font-size: 32px; font-weight: 800; }
+.stat-card.hot .num { color: var(--accent); }
+.stat-card .lbl { font-size: 12.5px; color: var(--ink-3); margin-top: 8px; line-height: 1.4; }
+
+.section { margin-bottom: 56px; }
+.section-head { margin-bottom: 24px; }
+.section-head .eyebrow { display: block; margin-bottom: 8px; }
+.section-head h2 { font-size: 30px; font-weight: 800; }
+.section-head p { color: var(--ink-2); margin-top: 8px; max-width: 700px; }
+
+.exec { background: var(--card); border-radius: var(--radius); padding: 30px 34px; box-shadow: var(--shadow); margin-bottom: 56px; }
+.exec .eyebrow { display: block; margin-bottom: 12px; }
+.exec p { color: var(--ink-2); line-height: 1.75; }
+.exec p + p { margin-top: 12px; }
+.exec strong { color: var(--ink); }
+
+.theme-card { background: var(--card); border-radius: var(--radius); padding: 26px 30px; margin-bottom: 18px; box-shadow: var(--shadow); }
+.theme-top { display: flex; align-items: baseline; gap: 14px; margin-bottom: 4px; }
+.theme-rank { font-size: 24px; font-weight: 800; color: var(--accent); opacity: 0.35; }
+.theme-title { font-size: 21px; font-weight: 700; }
+.theme-freq-label { font-size: 12.5px; color: var(--ink-3); margin: 8px 0 6px; }
+.freq-bar { height: 8px; background: var(--paper); border-radius: 999px; overflow: hidden; margin-bottom: 14px; }
+.freq-fill { height: 100%; border-radius: 999px; background: var(--accent); }
+.theme-desc { font-size: 15px; color: var(--ink-2); margin-bottom: 16px; line-height: 1.7; }
+.theme-desc strong { color: var(--ink); }
+.quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.quote { background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 11px 15px 11px 28px; font-size: 13.5px; font-style: italic; color: var(--ink-2); line-height: 1.55; position: relative; }
+.quote::before { content: '\201C'; position: absolute; left: 10px; top: 6px; font-size: 20px; color: var(--accent); font-style: normal; opacity: 0.45; }
+
+.friction-card { background: var(--card); border-radius: 0 var(--radius) var(--radius) 0; border-left: 4px solid var(--ink); padding: 22px 28px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.friction-card h3 { font-size: 18px; margin-bottom: 6px; }
+.friction-card .f-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); background: var(--paper); border-radius: 999px; padding: 3px 10px; margin-left: 8px; vertical-align: middle; }
+.friction-card p { font-size: 14.5px; color: var(--ink-2); line-height: 1.7; }
+.friction-card .fq { font-style: italic; color: var(--ink-3); display: block; margin-top: 8px; font-size: 13.5px; }
+
+.tbl-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card); font-size: 14.5px; }
+th { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); text-align: left; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+td { padding: 14px 20px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--ink-2); line-height: 1.6; }
+tr:last-child td { border-bottom: none; }
+td:first-child { font-weight: 600; color: var(--ink); min-width: 180px; }
+.verdict-risk { color: var(--accent); font-weight: 600; }
+.verdict-good { color: var(--pos); font-weight: 600; }
+
+.phrase-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.phrase-group { background: var(--card); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); }
+.phrase-group h3 { font-size: 16px; margin-bottom: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--pos-soft); color: var(--pos); border-radius: 999px; padding: 5px 13px; font-size: 13px; font-weight: 500; }
+
+.seg-card { background: var(--card); border-radius: var(--radius); padding: 22px 26px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.seg-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.seg-card h3 { font-size: 18px; }
+.seg-badge { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 999px; padding: 3px 10px; }
+.seg-badge.new { background: var(--accent-soft); color: var(--accent); }
+.seg-badge.live { background: var(--pos-soft); color: var(--pos); }
+.seg-card .lead { font-size: 14.5px; color: var(--ink-2); margin-bottom: 10px; }
+.example { background: var(--paper); border-radius: 10px; padding: 12px 16px; font-size: 14.5px; font-weight: 600; margin-bottom: 8px; }
+.example .ex-lbl { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; }
+.seg-card .why { font-size: 13.5px; color: var(--ink-3); line-height: 1.6; }
+
+.lp-list { counter-reset: lp; }
+.lp-item { background: var(--card); border-radius: var(--radius); padding: 20px 24px 20px 66px; margin-bottom: 12px; position: relative; box-shadow: var(--shadow); }
+.lp-item::before { counter-increment: lp; content: counter(lp, decimal-leading-zero); position: absolute; left: 22px; top: 20px; font-size: 20px; font-weight: 800; color: var(--accent); opacity: 0.4; }
+.lp-item h3 { font-size: 16.5px; margin-bottom: 4px; }
+.lp-item p { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+
+.avoid { background: var(--card); border-radius: var(--radius); padding: 28px 32px; box-shadow: var(--shadow); }
+.avoid ul { list-style: none; }
+.avoid li { padding: 11px 0 11px 26px; position: relative; font-size: 14.5px; color: var(--ink-2); border-bottom: 1px solid var(--border); line-height: 1.65; }
+.avoid li:last-child { border-bottom: none; }
+.avoid li::before { content: ''; position: absolute; left: 2px; top: 19px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+.avoid li strong { color: var(--ink); }
+
+.sources { font-size: 13.5px; color: var(--ink-3); }
+.sources h3 { font-size: 16px; margin-bottom: 12px; color: var(--ink); }
+.sources ul { list-style: none; }
+.sources li { padding: 4px 0 4px 18px; position: relative; }
+.sources li::before { content: ''; position: absolute; left: 2px; top: 12px; width: 6px; height: 6px; border-radius: 50%; background: var(--pos); }
+.sources a { color: var(--pos); }
+.caveat { background: var(--accent-soft); border-radius: 10px; padding: 14px 18px; margin-top: 16px; font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+.caveat strong { color: var(--ink); }
+
+.footer { text-align: center; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); font-size: 13px; color: var(--ink-3); }
+.footer a { color: var(--ink-2); font-weight: 600; }
+
+@media (max-width: 720px) {
+  .cover h1 { font-size: 32px; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .quotes, .phrase-groups { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <span class="eyebrow">Voice of customer research</span>
+    <h1>What {Brand} customers <span class="hot">actually say</span></h1>
+    <p class="subtitle">Patterns from {N} full-text reviews across {sources} — translated into ad copy and landing page direction.</p>
+    <div class="meta-pills">
+      <span class="pill"><strong>Brand:</strong> {Brand}</span>
+      <span class="pill"><strong>Date:</strong> {date}</span>
+      <span class="pill"><strong>Market:</strong> {market}</span>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card hot"><div class="num">{count}</div><div class="lbl">{biggest source + rating}</div></div>
+    <div class="stat-card"><div class="num">{rating}</div><div class="lbl">{source 2}</div></div>
+    <div class="stat-card"><div class="num">{rating}</div><div class="lbl">{source 3}</div></div>
+    <div class="stat-card"><div class="num">~{N}</div><div class="lbl">Reviews read in full for this analysis</div></div>
+  </div>
+
+  <div class="exec">
+    <span class="eyebrow">Executive summary</span>
+    <p>{2 paragraphs: the dominant theme and its proof devices; the top friction themes; the biggest copy gap or untapped segment. Bold the load-bearing phrases.}</p>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section 01</span>
+      <h2>What customers love</h2>
+      <p>Ranked by share of positive reviews mentioning each theme. Quotes are verbatim.</p>
+    </div>
+    <!-- Repeat .theme-card per theme (4-6 full cards, more as compact entries) -->
+    <div class="theme-card">
+      <div class="theme-top"><span class="theme-rank">01</span><span class="theme-title">{Theme}</span></div>
+      <div class="theme-freq-label">Mentioned in ~{X}% of positive reviews</div>
+      <div class="freq-bar"><div class="freq-fill" style="width:{X}%"></div></div>
+      <p class="theme-desc">{What customers specifically describe.}</p>
+      <div class="quotes">
+        <div class="quote">{verbatim quote}</div>
+        <div class="quote">{verbatim quote}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section 02</span>
+      <h2>What frustrates customers</h2>
+      <p>Ranked by frequency across the complete low-star corpus plus qualifiers inside positive reviews.</p>
+    </div>
+    <!-- Repeat .friction-card per friction -->
+    <div class="friction-card">
+      <h3>{Friction} <span class="f-tag">~{X}% · {note}</span></h3>
+      <p>{What it is, what causes it, the copy implication.}</p>
+      <span class="fq">{verbatim quote} · {verbatim quote}</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section 03</span>
+      <h2>Live ad copy vs voice of customer</h2>
+      <p>{Only include this section if current copy was provided/pulled.}</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Live copy theme</th><th>Review verdict</th></tr></thead>
+        <tbody>
+          <tr><td>{claim}</td><td><span class="verdict-risk">Risky.</span> {why}</td></tr>
+          <tr><td>{claim}</td><td><span class="verdict-good">Good match</span> — {why}</td></tr>
+          <tr><td>{missing theme}</td><td><span class="verdict-risk">Missing.</span> {why it should exist}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section 04</span>
+      <h2>Voice-of-customer phrase bank</h2>
+      <p>Real customer words, adapted for headlines and landing pages.</p>
+    </div>
+    <div class="phrase-groups">
+      <div class="phrase-group">
+        <h3>{Positioning angle}</h3>
+        <div class="chips"><span class="chip">{phrase}</span><span class="chip">{phrase}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section 05</span>
+      <h2>Copy recommendations by segment</h2>
+    </div>
+    <div class="seg-card">
+      <div class="seg-head"><h3>{Segment}</h3><span class="seg-badge new">{status}</span></div>
+      <p class="lead"><strong>Lead with:</strong> {angle}.</p>
+      <div class="example"><span class="ex-lbl">Example direction</span>{example headline}</div>
+      <p class="why">{Why this works, per the reviews.}</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section 06</span>
+      <h2>Landing page opportunities</h2>
+    </div>
+    <div class="lp-list">
+      <div class="lp-item"><h3>{Opportunity}</h3><p>{What to do and the review evidence.}</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section 07</span>
+      <h2>What not to lead with</h2>
+    </div>
+    <div class="avoid">
+      <ul>
+        <li><strong>{Don't}.</strong> {Why, per the reviews.}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section sources">
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="{url}">{Source}</a> ({counts, coverage})</li>
+    </ul>
+    <div class="caveat"><strong>Corpus caveats:</strong> {honest limits — gated pages, incentivised clusters, archive gaps, brand-supplied stats}.</div>
+  </div>
+
+  <div class="footer">
+    Built with the <a href="https://github.com/big-flare/skills-pack">Big Flare Skills Pack</a> — free Claude skills for ecommerce marketers, by <a href="https://bigflare.com">Big Flare</a>.
+  </div>
+
+</div>
+</body>
+</html>

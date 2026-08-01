@@ -1,0 +1,19 @@
+{
+  "name": "bigflare-skills-pack",
+  "description": "Big Flare Skills Pack — free Claude skills for ecommerce marketers",
+  "owner": {
+    "name": "Big Flare",
+    "email": "clients@bigflare.com"
+  },
+  "plugins": [
+    {
+      "name": "bigflare-skills-pack",
+      "source": "./",
+      "description": "Free Claude skills for ecommerce marketers — voice-of-customer research, ad copy, and more",
+      "author": {
+        "name": "Big Flare"
+      },
+      "category": "marketing"
+    }
+  ]
+}
