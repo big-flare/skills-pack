@@ -1,7 +1,7 @@
 ---
 name: user-review-report
 description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
-version: 1.0.0
+version: 1.0.1
 pack: big-flare-skills-pack
 ---
 
@@ -45,7 +45,9 @@ Record what exists and roughly how many reviews each source holds. Aim to cover 
 
 ## Step 3 — Mine the reviews
 
-**Target: 150+ reviews read in full**, more if the brand is large. Read `references/mining-playbook.md` before starting — it covers per-platform access quirks and sampling traps.
+**Target: 150+ customer statements read in full**, more if the brand is large. Read `references/mining-playbook.md` before starting — it covers per-platform access quirks and sampling traps.
+
+Counting rule: a review "counts" only if you read its actual text on a page (or a complete archived copy) — screening search results or summaries does not count. When tooling means you screen many but fully read fewer, report both numbers ("~800 screened, ~140 read verbatim") in your caveats.
 
 Non-negotiables:
 
@@ -83,6 +85,7 @@ Generate `{brand}-user-review-report.html` following `references/report-template
 
 - Keep the template's `:root` tokens unless the user asks for their brand colours — then swap only the token values.
 - Populate every section from the analysis file. The report is the shareable artifact; the markdown is the working file.
+- If you skipped the gap analysis (no ad copy available), drop that section entirely and renumber the remaining section eyebrows so there's no gap.
 - Keep the footer credit intact.
 
 ## Step 6 — Deliver

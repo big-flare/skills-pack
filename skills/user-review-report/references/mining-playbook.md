@@ -5,8 +5,8 @@ Per-platform access quirks and sampling traps, learned the hard way. Read before
 ## Access quirks by platform
 
 **Trustpilot**
-- Often blocks plain HTTP fetches (403). If a fetch fails, try the country subdomain (`au.trustpilot.com`, `uk.trustpilot.com`), a browser tool if available, or fall back to site-limited web searches (`site:trustpilot.com {brand} {theme keyword}`) and harvest quotes from result snippets.
-- Deep pagination (typically past page ~10) is **login-gated** — you'll silently hit a wall. Work around it with the star-rating filters (`?stars=1`, `?stars=2`, …), which let you read the complete low-star corpus even when you can't page through everything.
+- Often blocks plain HTTP fetches (403). Escalate through: the country subdomain (`au.trustpilot.com`, `uk.trustpilot.com`), the star-rating filters (`?stars=1`, `?stars=2`, …), a browser tool if you have one. **All of these can 403 too** — in some environments no direct Trustpilot route works at all. When that happens, cover Trustpilot at *theme level* via site-limited web searches (`site:trustpilot.com {brand} {theme keyword}`), don't count it toward verbatim evidence, and disclose the access failure in your caveats.
+- Deep pagination (typically past page ~10) is **login-gated** — you'll silently hit a wall. The star filters, where they work, let you read the complete low-star corpus even when you can't page through everything.
 - Check the review timeline: many brands have a burst of short, invited, service-focused reviews from launch, then a gap, then organic reviews. Weight organic ("unprompted") reviews higher for product truth.
 - Note Trustpilot's own trust flags ("has not asked for reviews", reply rate to negatives) — useful colour.
 
@@ -15,7 +15,7 @@ Per-platform access quirks and sampling traps, learned the hard way. Read before
 - Watch for **incentivised review clusters** — badges like "Fair Incentive" or a burst of reviews in one month from a product-trial campaign. These skew positive and gush-y; weight them below organic verified purchases, and say so in your caveats.
 
 **Reddit**
-- Direct reddit.com fetches are frequently blocked. Try `old.reddit.com`, a browser tool, or a search-index archive (e.g. pullpush.io) as fallbacks; site-limited web search (`site:reddit.com "{brand}"`) also surfaces threads whose snippets carry usable quotes.
+- Direct reddit.com fetches are frequently blocked — and your fetch tool may refuse `old.reddit.com` and `web.archive.org` outright (tool-level blocks, not site-level). **The most reliable baseline route is the pullpush.io search archive** (`https://api.pullpush.io/reddit/search/comment/?q={brand}` and `/submission/`) — try it early rather than last. A browser tool works too if available; site-limited web search (`site:reddit.com "{brand}"`) surfaces threads as a final fallback.
 - The most valuable Reddit material is usually NOT dedicated review threads — it's drive-by mentions in condition/problem threads ("what worked for your X?"). Search the brand name, but also search the problem category.
 - Reddit is where the skeptics live. Capture the skepticism verbatim — the exact objections ("does this even work / is it placebo / the science says...") are what your landing page has to answer. Don't sanitise it out.
 
@@ -27,6 +27,13 @@ Per-platform access quirks and sampling traps, learned the hard way. Read before
 
 **Amazon (if the brand sells there)**
 - Sort by "most recent" AND read the critical-review filter. Amazon's negative reviews skew heavily toward fulfilment issues — separate those from product complaints.
+- Amazon pages often render as an empty JavaScript shell to fetch tools. If you get no content, don't fight it — cover Amazon via search snippets at theme level and disclose.
+
+**Hard walls — general rules**
+- **Never attempt to bypass a CAPTCHA, bot check, or login wall.** A walled source gets covered at theme level via search, or dropped — always disclosed in caveats.
+- **Rate limiting (429):** back off and try the source again later in the session; if it persists, fall back to search-indexed content and disclose.
+- **Google reviews** have no reliable headless route — treat the star rating/count (visible in search) as context and don't plan on mining them.
+- **Summarised search results:** some environments' web search returns AI-summarised results rather than raw page snippets. Text harvested that way is paraphrase-risk — usable for theme identification, **never as a verbatim quote**. Only quote text you read on an actual page.
 
 ## Sampling traps
 
@@ -35,6 +42,9 @@ Per-platform access quirks and sampling traps, learned the hard way. Read before
 3. **One platform ≠ the market.** Trustpilot attracts service complaints; product platforms attract product feedback; Reddit attracts skeptics. Three sources minimum before ranking themes.
 4. **Quote truncation.** Search snippets truncate. Mark truncations honestly; never reconstruct or "complete" a quote.
 5. **Small-N humility.** If you read 40 reviews, say "~40 reviews read" and present frequencies as rough. Never imply a census you didn't do.
+6. **Wrong third-party aggregators.** Review-aggregator and affiliate sites misreport primary-source numbers (e.g. claiming "400+ complaints" when the primary page shows 4). When an aggregator conflicts with the primary source, the primary source wins — exclude the aggregator and note why.
+7. **Synthetic quotes on affiliate roundups.** AI-generated affiliate pages fabricate "user quotes" (often attributed to Reddit). If a quote can't be traced to a real review or thread, it doesn't exist for your purposes.
+8. **Wrong product in the thread.** In long threads, highly-quoted comments sometimes review a *competitor's* product. Before capturing a quote, confirm what it's actually about.
 
 ## What to capture per review (mental checklist)
 
