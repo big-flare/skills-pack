@@ -1,7 +1,7 @@
 ---
 name: user-review-report
-description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. It also grades the brand's live ad copy against what customers actually say: pulled from Google Ads if connected, from a pasted or uploaded export, or — for any competitor, where neither is possible — harvested from the public Google Ads Transparency Center. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, audit a competitor's advertising against their own reviews, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
-version: 1.5.0
+description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. If Google Ads is connected it pulls the live ad copy automatically (or accepts a pasted/uploaded export) and grades every headline against what customers actually say. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
+version: 1.6.0
 pack: big-flare-skills-pack
 ---
 
@@ -19,15 +19,11 @@ Ask the user for (don't proceed until you have the first three):
 2. **Main market** (country — this decides which review platforms matter)
 3. **Product category** (what they sell, roughly)
 4. *Optional:* known review platforms, competitor names, a specific question they want answered
-5. **Current ad copy** — see the four paths below. Worth 30 seconds of setup: it upgrades the gap analysis and the opportunity map from inferred to exact.
+5. **Current ad copy** — see the three paths below. Worth 30 seconds of setup: it upgrades the gap analysis and the opportunity map from inferred to exact.
 
-### Current ad copy — four paths
+### Current ad copy — three paths
 
-**Ordered by data quality, gated by capability — these are different axes.** Path 3 gives better data than nothing but needs browser automation, so it ranks above "nothing" in quality yet below paths 1-2 in portability. Work down the list and take the first path that is both *available* and *appropriate*; each path names what it degrades to.
-
-**Whose brand is being analysed changes the routing:**
-- **The user's own brand** → paths 1 and 2 are strictly better (real asset lists, true usage counts, performance labels). Offer those first and say why. Only fall to path 3 if the user declines or genuinely can't supply the data — and tell them plainly it's the weaker source.
-- **A competitor** → paths 1 and 2 are impossible; you will never have their account or their export. Go straight to path 3. This is what makes competitor gap analysis work at all.
+In order of preference:
 
 1. **Google Ads connected.** If a Google Ads integration/tool is available in the session, use it — confirm the right account with the user, then pull every enabled responsive search ad's headlines and descriptions with campaign and ad group names. Example GAQL:
    ```
@@ -40,20 +36,10 @@ Ask the user for (don't proceed until you have the first three):
      AND ad_group_ad.ad.type = 'RESPONSIVE_SEARCH_AD'
    ```
    If asset performance labels come back with the headlines (`assetPerformanceLabel`: LOW/GOOD/BEST), keep them — they enable an extra cross-reference in Step 4. Two realities of live pulls: (a) accounts with many RSAs return more data than fits in a tool result — expect to process the saved output with a small script, or page the query with `LIMIT`/campaign filters; (b) recently refreshed accounts return mostly PENDING labels — when few assets carry real labels, treat the label cross-reference as directional colour, not evidence, and say so.
-   *Degrades to:* path 2 if no Google Ads tool is available or the user can't grant access.
-2. **Manual upload or paste.** No integration? Ask the user to either paste their headlines and descriptions, or upload an export — the Google Ads UI's Ads download (CSV) and Google Ads Editor exports both work. Accept any reasonable format and extract the headline/description texts plus campaign/ad group names where present. This path works on every surface.
-   *Degrades to:* path 3 if the user has no export to hand, or the brand isn't theirs.
-3. **Google Ads Transparency Center harvest** *(requires browser automation — a tool that can navigate, screenshot and scroll).* Google publishes every advertiser's currently-running ads. Harvest them to build the inventory from public data. **Full procedure and gotchas: `references/mining-playbook.md` → "Harvesting ads from the Google Ads Transparency Center".** In outline: resolve the advertiser via search autocomplete (take the *verified* entity), open its page with `&format=TEXT` to isolate search ads, then capture and read the rendered ads.
-   - **Default stop:** ~150 ads, or 3 consecutive captures yielding no new unique headline, whichever comes first. Then report coverage honestly ("142 of ~600 text ads captured") and offer to go deeper. Don't silently harvest a full corpus — it's slow and expensive for the user.
-   - **Scope guard:** only harvest the brand whose reviews you are analysing. This path exists to feed the gap table, not to be a general ad-lookup tool.
-   - **What you don't get:** no performance labels (LOW/GOOD/BEST live only inside the advertiser's account) and no RSA asset pools — you see assembled ads as served. Both limits must appear in your caveats.
-   - **Save the harvest** as a dated working file (`{brand}-ad-inventory-YYYY-MM-DD.md`) alongside the analysis, so re-runs and follow-up questions don't re-scrape.
-   *Degrades to:* path 4 if no browser tool is available, the advertiser can't be found, or the site blocks you. Say which, don't fail the run.
-4. **None available.** Skip the gap-analysis section rather than guessing. The opportunity map falls back to the brand's observed public marketing (see Step 5).
+2. **Manual upload or paste.** No integration? Ask the user to either paste their headlines and descriptions, or upload an export — the Google Ads UI's Ads download (CSV) and Google Ads Editor exports both work. Accept any reasonable format and extract the headline/description texts plus campaign/ad group names where present.
+3. **Neither.** Skip the gap-analysis section rather than guessing. The opportunity map falls back to the brand's observed public marketing (see Step 5).
 
-**Normalise, then forget the source.** Whichever path supplied the data, reduce it to one inventory before analysis: each unique headline and description with (a) how many ads use it, (b) which campaigns/ad groups (split brand vs non-brand where the naming makes it obvious), and (c) its performance label if available. From this point on, every path's data is treated identically.
-
-**One exception you must not blur — what the frequency count means.** Paths 1-2 count *asset usage*: how many ads draw on that headline asset. Path 3 counts *served creatives*: how many of the ads you captured displayed that line, because the Transparency Center never exposes the RSA asset pool. These are related but not the same number. When the inventory came from path 3, phrase every finding as **"appears across N of the ads we captured"** — never "this asset is used in N ads." The stronger phrasing would overstate what public data can support. Two normalisation rules: **merge near-identical variants into one theme** ("Fast Absorbing & Non Sticky" / "Non-Sticky & Easy To Apply" are one claim — gap verdicts apply to themes, not string variants, so report combined usage counts); and if the account spans **multiple markets**, keep everything in the inventory, note the split, and weight the gap analysis toward the user's stated main market.
+**Normalise, then forget the source.** Whichever path supplied the data, reduce it to one inventory before analysis: each unique headline and description with (a) how many ads use it, (b) which campaigns/ad groups (split brand vs non-brand where the naming makes it obvious), and (c) its performance label if available. From this point on, uploaded data and pulled data are treated identically. Two normalisation rules: **merge near-identical variants into one theme** ("Fast Absorbing & Non Sticky" / "Non-Sticky & Easy To Apply" are one claim — gap verdicts apply to themes, not string variants, so report combined usage counts); and if the account spans **multiple markets**, keep everything in the inventory, note the split, and weight the gap analysis toward the user's stated main market.
 
 ## Step 2 — Scope the review landscape
 
@@ -98,7 +84,7 @@ Write the analysis file (`{brand}-user-review-analysis.md`) with these sections:
 1. **Header** — date, sources with review counts and how many you read, purpose.
 2. **What customers love** — themes RANKED by frequency, each with: estimated % of positive reviews, what specifically customers describe, and 5-10 verbatim quotes.
 3. **What frustrates customers** — ranked the same way. Distinguish product frictions (copy-relevant) from operational issues (shipping, support — flag but don't over-weight for messaging).
-4. **Gap analysis** (whenever Step 1 produced an inventory by any of paths 1-3) — table: each live copy theme vs the review verdict, weighted by actual usage ("your most-used headline, in 6 ads, is also the most-disputed claim in negative reviews" is the highest-leverage finding this skill produces). If the inventory came from a Transparency Center harvest, keep the weaker phrasing — "appears across N of the ads we captured" — and state the coverage. Flag: claims reviews dispute (worst when in heavy rotation), themes reviews support that copy underuses (e.g. one headline for a top-3 theme), and proof language reviews offer that copy ignores. If performance labels came with the data, cross-reference them — a Google-rated LOW asset that reviews also dispute is a confident kill; a BEST-rated asset aligned with a top theme is the one to multiply. Split brand vs non-brand campaigns where distinguishable — non-brand copy is where VoC language matters most.
+4. **Gap analysis** (if current ad copy was pulled or uploaded) — table: each live copy theme vs the review verdict, weighted by actual usage ("your most-used headline, in 6 ads, is also the most-disputed claim in negative reviews" is the highest-leverage finding this skill produces). Flag: claims reviews dispute (worst when in heavy rotation), themes reviews support that copy underuses (e.g. one headline for a top-3 theme), and proof language reviews offer that copy ignores. If performance labels came with the data, cross-reference them — a Google-rated LOW asset that reviews also dispute is a confident kill; a BEST-rated asset aligned with a top theme is the one to multiply. Split brand vs non-brand campaigns where distinguishable — non-brand copy is where VoC language matters most.
 5. **Voice-of-customer phrase bank** — real customer phrasings grouped by positioning angle, ready to adapt into headlines.
 6. **Copy recommendations by audience segment** — for each segment found in Step 3: what to lead with, an example headline direction, and why.
 7. **Landing page opportunities** — what the reviews say the LP should pre-empt, prove, or promise. Honest expectation-setting that reviews show converts (e.g. realistic timelines) belongs here.
