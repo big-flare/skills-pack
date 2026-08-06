@@ -1,9 +1,9 @@
 {
   "name": "bigflare-skills-pack",
-  "description": "Big Flare Skills Pack — free Claude skills for ecommerce marketers, from the team at Big Flare",
+  "description": "Big Flare Skills Pack \u2014 free Claude skills for ecommerce marketers, from the team at Big Flare",
   "author": {
     "name": "Big Flare",
     "url": "https://bigflare.com"
   },
-  "version": "0.5.1"
+  "version": "0.6.0"
 }

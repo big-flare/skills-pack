@@ -2,6 +2,8 @@
 
 Per-platform access quirks and sampling traps, learned the hard way. Read before mining.
 
+Also in here: **"Harvesting ads from the Google Ads Transparency Center"** (last section) — the procedure for Step 1's path 3, used when you need a brand's live ad copy and can't get it from an account or an export.
+
 ## Access quirks by platform
 
 **Trustpilot**
@@ -55,3 +57,51 @@ Per-platform access quirks and sampling traps, learned the hard way. Read before
 - Who they are (any demographic/situation signal)
 - The proof device they offer (timeline, measurement, before/after, "removal test")
 - For negatives: was the failure product, expectation, or operations?
+
+## Harvesting ads from the Google Ads Transparency Center
+
+This is **Step 1 path 3** — how to get a brand's live ad copy from public data when there's no connected Google Ads account and no user-supplied export. It is the only route that works for a **competitor**, since you will never have their account or their CSV.
+
+`adstransparency.google.com` is Google's own public disclosure tool: no login, no paid tool, no CAPTCHA in normal use. **It requires a browser-automation tool** that can navigate, screenshot and scroll. Without one, this path is unavailable — degrade to path 4 and say so.
+
+### Procedure
+
+1. **Open** `https://adstransparency.google.com/?region=XX&hl=en` (`region` = the two-letter market code; `hl=en` forces English regardless of where you appear to be browsing from).
+2. **Resolve the advertiser.** Type the brand into the search box and take the suggestion from the autocomplete dropdown. Two traps: pick the **verified** entity, and note that one brand often has **several entities across regions** with wildly different ad counts (e.g. a US entity with ~1K ads and an EU entity with ~1). Choose the one matching the user's stated market; if another region is far larger, note the imbalance rather than silently switching.
+3. **Isolate search ads.** On the advertiser page, append **`&format=TEXT`** to the URL — it is a genuine URL parameter, so use it rather than clicking the filter. The resulting URL looks like:
+   `https://adstransparency.google.com/advertiser/AR<id>?region=US&hl=en&format=TEXT`
+   The ad count updates to text ads only (e.g. ~1K all formats → ~600 text).
+4. **Set a tall viewport** — 1500×2000 fits roughly 12 ads per capture. Worth doing; it cuts the number of cycles by several times.
+5. **Capture and read.** Screenshot, read the rendered ads (headline, description, display path, plus any sitelinks, promo extensions and star ratings), scroll, repeat. Record each ad's headline, description and landing path.
+6. **Stop** at ~150 ads, or after 3 consecutive captures that yield no new unique headline — whichever comes first. Then report coverage honestly and offer to go deeper.
+7. **Save the inventory** to a dated working file so re-runs and follow-ups don't re-scrape.
+
+### Practical harvesting realities
+
+- **Results re-order between page loads.** A fresh load of the same advertiser returns the ads in a different sequence, so you cannot rely on position to track progress. **Dedupe by headline text**, not by index, and expect to re-see ads you already have.
+- **Sustained scrolling is where browser tools get flaky.** Long harvests tend to degrade: scroll actions time out, and captures come back blank or mid-repaint. Two mitigations that work: scroll using the browser tool's own scroll action (page-level JS scrolling often does **not** move what the screenshot captures), and reload the advertiser page to reset when captures start coming back empty. If the tool keeps failing, **stop and report the coverage you actually achieved** — a partial harvest honestly labelled is a valid result; a stalled loop is not.
+- **Budget realistically.** ~12 ads per capture means a 150-ad harvest is a dozen-plus successful cycles, and a full multi-hundred corpus is many times that. This is the single most expensive step in the skill — which is why the default stop exists.
+
+### Do not waste time on these — both were tried and both fail
+
+- **DOM extraction / `contentDocument`.** The creatives render inside **sandboxed iframes**. Reading `iframe.contentDocument` throws a `SecurityError` even though the frames appear same-origin. `read_page`-style accessibility trees also come back empty on this SPA.
+- **Mining the preview bundle.** The iframes load `displayads-formats.googleusercontent.com/ads/preview/content.js`. It fetches fine (200, ~150KB) but the ad copy is **obfuscated inside minified JS** — string-literal extraction returns only library error messages. The URL also carries signed `sig`/`nonce` params minted by the page, so it can't be constructed independently.
+
+**Reading the rendered pixels is the only reliable route.** Go straight to screenshots.
+
+### What this source cannot tell you
+
+- **No performance labels.** LOW/GOOD/BEST asset ratings exist only inside the advertiser's own account. The label cross-reference in Step 4's gap analysis is simply unavailable here — don't imply otherwise.
+- **No RSA asset pools.** You see assembled ads as served, not the underlying headline/description pool they were combined from.
+- **Frequency means something different.** Counting here is "how many captured creatives displayed this line", NOT "how many ads use this asset". Phrase findings as **"appears across N of the ads we captured"**. Getting this wrong overstates the claim.
+- **Currently-running ads only** — no history, no spend, no impressions.
+
+### Hard walls and etiquette
+
+The general rules at the top of this playbook apply unchanged: **never sign in, never bypass a bot check or CAPTCHA, back off on 429 and disclose.** Rate limiting has not been observed at small scale, but has not been tested across a full multi-hundred-ad corpus either — if it appears, stop, report what you captured, and treat the partial harvest as your coverage number.
+
+**Scope guard:** harvest only the brand whose reviews you're analysing. This exists to feed the gap table, not to become a general competitor ad-lookup tool.
+
+### Durability warning
+
+This procedure reads an undocumented third-party UI. When Google changes it, the specifics above (the `format=TEXT` param, autocomplete resolution, the viewport trick) may break. If they do: **degrade to path 4 and tell the user the source is unavailable** — never fail the whole run over it, and never start guessing ad copy.
