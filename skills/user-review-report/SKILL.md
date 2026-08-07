@@ -1,7 +1,7 @@
 ---
 name: user-review-report
 description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. If Google Ads is connected it pulls the live ad copy automatically (or accepts a pasted/uploaded export) and grades every headline against what customers actually say. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
-version: 1.7.0
+version: 1.8.0
 pack: big-flare-skills-pack
 ---
 
@@ -13,13 +13,15 @@ The core idea: **your best copywriter is your existing customer base.** Reviews 
 
 ## Step 1 — Intake
 
-Ask the user for (don't proceed until you have the first three):
+Two gates before any research starts. Cover both in **one message** to the user — never a chain of one-question messages.
 
-1. **Brand name** and **website**
-2. **Main market** (country — this decides which review platforms matter)
-3. **Product category** (what they sell, roughly)
-4. *Optional:* known review platforms, competitor names, a specific question they want answered
-5. **Current ad copy** — see the three paths below. Worth 30 seconds of setup: it upgrades the gap analysis and the opportunity map from inferred to exact.
+**Gate A — brand facts.** You need: **brand name + website**, **main market** (country — it decides which review platforms matter), and **product category**. If the user gave only a URL, infer these from the site and present them as assumptions to confirm rather than asking cold. Also invite the optional extras in the same message: known review platforms, competitor names, a specific question they want answered.
+
+**Gate B — the ad-copy route. This question is MANDATORY — ask it every run, before any mining starts.** The ad-copy gap analysis is the highest-value section of the report, and which route supplies the data is the user's call, not yours. Ask which of the three paths applies even when you could start without it, and even when no Google Ads integration is visible in the session. Suggested phrasing:
+
+> "One thing before I start: this report can grade your live ad copy against what your customers actually say — it's the most valuable section. I can **(1)** pull your ads automatically from Google Ads [offer only if an ads integration is available], **(2)** take a pasted or uploaded export (the Ads UI download or a Google Ads Editor export both work), or **(3)** skip it — the report will still cover everything else, but no gap analysis. Which would you like?"
+
+**Do not begin Step 2 until the route is resolved.** Resolved means the user picked a path — and for path 1, confirmed which account — supplied the data, or explicitly said to skip. Assuming path 3 because the user didn't mention ad copy is **not** resolution: it silently deletes the report's best section. The only exception is when the user's opening message already supplied ad copy or explicitly declined it — then confirm your reading in the Gate A message instead of re-asking.
 
 ### Current ad copy — three paths
 
