@@ -1,7 +1,7 @@
 ---
 name: user-review-report
 description: Voice-of-customer research from real user reviews. Mines a brand's reviews across Trustpilot, regional review platforms, Reddit, editorial press, and the brand's own site, then turns the patterns into ad copy direction, a customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. If Google Ads is connected it pulls the live ad copy automatically (or accepts a pasted/uploaded export) and grades every headline against what customers actually say. USE WHEN you want to know what customers actually say about a brand (yours or a competitor's), improve ad copy with real customer language, find messaging gaps, or research a market's objections. NOT for reputation management, review-response writing, or soliciting reviews.
-version: 1.6.0
+version: 1.7.0
 pack: big-flare-skills-pack
 ---
 
@@ -51,20 +51,61 @@ Before mining, find out where this brand's reviews actually live. Run searches l
 - `{brand} review reddit`
 - `{brand} review` (for editorial/blog roundups)
 
-| Market | Platforms to check beyond Trustpilot |
-|---|---|
-| Australia | ProductReview.com.au |
-| UK | Feefo, Reviews.io |
-| US | BBB, ConsumerAffairs, Google reviews |
-| SaaS/software (any) | G2, Capterra, GetApp |
-| Sold on Amazon | Amazon reviews for their listings |
-| Any DTC brand | Their own site's review widget (often the largest corpus) |
+**By market** (regional platforms beyond Trustpilot):
 
-Record what exists and roughly how many reviews each source holds. Aim to cover **at least three independent sources** — a single platform gives a skewed picture (each platform attracts different complaint types).
+| Market | Platforms to check |
+|---|---|
+| US | BBB, ConsumerAffairs, Google reviews, Yelp (local/service brands) |
+| UK | Feefo, Reviews.io, Checkatrade / Trustatrader (trades), Mumsnet (parenting products) |
+| Australia | ProductReview.com.au, MouthsOfMums (family products) |
+| Canada | Google reviews, BBB, HomeStars (home services) |
+| Germany / DACH | Trusted Shops, eKomi, idealo |
+| France | Avis Vérifiés (Verified Reviews) |
+| Netherlands | Kiyoh |
+| India | MouthShut |
+
+**By category** (vertical platforms — check whichever rows fit the brand):
+
+| Category | Platforms to check |
+|---|---|
+| SaaS / software | G2, Capterra, GetApp, TrustRadius |
+| Mobile apps | App Store + Google Play reviews (both — the audiences differ) |
+| B2B services / agencies | Clutch, G2, Google reviews |
+| Travel / hospitality | TripAdvisor, Booking.com, Google reviews |
+| Restaurants / local | Google Maps, Yelp, OpenTable |
+| Home services / trades | Angi (US), Checkatrade (UK), Houzz, HomeStars (CA) |
+| Beauty / skincare | Sephora & Ulta listing reviews, MakeupAlley, Influenster |
+| Health / supplements | Amazon, iHerb, condition-specific subreddits |
+| Baby / parenting | Mumsnet, BabyCenter, MouthsOfMums |
+| Fashion / apparel | Own-site + retailer listings (ASOS etc.), Reddit sizing threads |
+| Electronics | Retailer listings (Best Buy, Currys), Rtings (editorial), Reddit |
+| Courses / education | Trustpilot, Reddit, Course Report / Class Central |
+
+**Wherever the brand actually sells** — reviews accumulate on the *listing*, not just the brand: Amazon,
+Etsy, eBay, Walmart.com, and big-box retailer product pages all carry their own review corpora. Check every
+marketplace the brand's site links to.
+
+**Always, any brand:** the brand's own on-site review widget (Yotpo / Okendo / Judge.me — often the single
+largest corpus, and always the most positive-skewed), Facebook page reviews, Reddit, and YouTube review
+videos plus their comment threads (comments are voice-of-customer too).
+
+Record what exists and roughly how many reviews each source holds. Aim to cover **at least three independent sources** — a single platform gives a skewed picture (each platform attracts different complaint types). The tables are routing hints, not a checklist: a typical brand has reviews on 3-6 of these, not all of them, and five minutes of scoping tells you which.
 
 ## Step 3 — Mine the reviews
 
-**Target: 150+ customer statements read in full**, more if the brand is large. Read `references/mining-playbook.md` before starting — it covers per-platform access quirks and sampling traps.
+**The read target is a FLOOR, not a cap** — scale it to the size of the visible corpus:
+
+| Visible corpus (all sources) | Read in full |
+|---|---|
+| Under ~500 reviews | Everything you can access |
+| ~500 – 5,000 | 150 – 250 |
+| Over 5,000 | 250 – 400 |
+
+Whatever the tier, the non-negotiable is the same: **the complete low-star corpus always gets read** — that
+matters more than the total count. In practice the binding constraint is platform access (login walls,
+pagination gates, 403s), not reading time; when access cuts you off below the tier target, report the
+shortfall in your caveats rather than padding the number. Read `references/mining-playbook.md` before
+starting — it covers per-platform access quirks and sampling traps.
 
 Counting rule: a review "counts" only if you read its actual text on a page (or a complete archived copy) — screening search results or summaries does not count. When tooling means you screen many but fully read fewer, report both numbers ("~800 screened, ~140 read verbatim") in your caveats.
 
