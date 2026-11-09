@@ -1,7 +1,7 @@
 ---
 name: product-description-writer
 description: Rewrites Google Shopping product descriptions from each product's own feed data, giving every product and every variant its own clear, fact-only description, then outputs a supplemental feed you upload to Google Merchant Center to replace the descriptions in Shopping without touching your store or main feed. Also produces a before/after review page that flags every fact the sources disagree on, plus a simple A/B test plan. USE WHEN you want better Google Shopping descriptions, your feed descriptions are stripped bullet lists, shared across sizes or colours, thin or missing, or you want a supplemental feed of new descriptions. NOT for product titles, website or product-page copy, ad copy, or fixing feed errors other than descriptions.
-version: 1.0.2
+version: 1.1.0
 pack: big-flare-skills-pack
 ---
 
@@ -91,7 +91,7 @@ python3 <skill-dir>/scripts/feedtool.py normalise <feed-file> --run <store>-desc
 Skip this step if the user turned it off or the products have no links. Otherwise, for each item group (variants share a page, so read it once per group):
 
 - Fetch the product page. On Shopify stores, adding `.json` to a product URL (`/products/<handle>.json`, with any `?variant=` part removed) usually returns the same product data as clean JSON; use it when it works.
-- Take **product facts only**: materials, dimensions, capacity, features, care. Ignore reviews, shipping and returns, promotions, related products and anything generic to the store.
+- Take **product facts only**: materials, dimensions, capacity, features, care, and any health claim the page makes about this product, in the page's own words. Ignore reviews, shipping and returns, promotions, related products and anything generic to the store.
 - Compare each page fact with the feed's facts. Different values for the same fact are a **conflict** (see the writing guide).
 - If a page fails to load or blocks fetching, record `"page": {"status": "failed"}` and carry on with the feed data. Never stop the run for it, and never fill the gap from general knowledge.
 
@@ -121,7 +121,7 @@ Tell the user briefly how far you have got between batches on long runs ("40 of 
 python3 <skill-dir>/scripts/feedtool.py check --run <store>-descriptions
 ```
 
-Errors must be fixed: rewrite the draft and `add` it again (a new draft for the same ID replaces the old one). Errors include a number that is not in the product's data, an unnamed variant, prices, shipping or promotional wording, links, exclamation marks, identical descriptions, and anything over 5,000 characters. Warnings need a look and either a fix or a reason: length outside 500–900, health wording, superlatives not in the data, US/UK spelling slips, a conflicting fact that leaked into the copy, and originals whose words mostly disappeared (a sign a fact was dropped).
+Errors must be fixed: rewrite the draft and `add` it again (a new draft for the same ID replaces the old one). Errors include a number that is not in the product's data, an unnamed variant, prices, shipping or promotional wording, links, exclamation marks, identical descriptions, and anything over 5,000 characters. Warnings need a look and either a fix or a reason: length outside 500–900, health wording or superlatives that the product's data or page doesn't contain, US/UK spelling slips, a conflicting fact that leaked into the copy, and originals whose words mostly disappeared (a sign a fact was dropped).
 
 By hand: go through the same list for every draft, using the self-check at the end of the writing guide.
 
@@ -162,7 +162,7 @@ Offer natural next steps: resolve the conflicts and rerun the affected products,
 
 - **Facts come only from the product's own data** (feed fields, and product-page facts when that path is on). No invented facts, numbers, benefits, uses or claims.
 - **Sources disagree? Leave the fact out** and flag it for a human. Never pick a side.
-- **No health or medical claims, no superlatives the data doesn't contain, no prices, promotions, shipping, delivery or returns policies, links or comparisons.** A warranty, guarantee or trial period that the product's own data states is a fact about the product, and it stays.
+- **No health or medical claims or superlatives that the product's own data or page doesn't make, and no prices, promotions, shipping, delivery or returns policies, links or comparisons.** A health claim the product's data or page does make stays, worded no more strongly than the source. A warranty, guarantee or trial period that the product's own data states is a fact about the product, and it stays.
 - **Every variant gets its own description that names it.**
 - **IDs are copied exactly** from the feed's ID column. Never edit, trim or re-case an ID, apart from cutting a full Merchant Center product ID (`online:en:US:ABC123`) down to its item ID.
 - **Nothing is uploaded or changed in the user's store, feed or Merchant Center by this skill.** The user uploads the file themselves.

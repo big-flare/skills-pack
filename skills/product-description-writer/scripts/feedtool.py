@@ -918,7 +918,10 @@ SUPERLATIVES = ["best", "finest", "perfect", "ultimate", "unbeatable", "unmatche
 HEALTH = ["cure", "cures", "treat", "treats", "treatment", "heal", "heals", "healing", "relieve", "relieves", "relief",
           "pain", "aches", "therapeutic", "therapy", "medical", "clinically", "clinical", "orthopaedic", "orthopedic",
           "antibacterial", "anti-bacterial", "antimicrobial", "hypoallergenic", "allergy", "allergies",
-          "eczema", "arthritis", "injury", "immune", "immunity", "detox", "anxiety", "insomnia", "disease"]
+          "eczema", "arthritis", "injury", "immune", "immunity", "detox", "anxiety", "insomnia", "disease",
+          "prevent", "prevents", "prevention", "boost", "boosts", "boosting", "inflammation", "anti-inflammatory",
+          "symptom", "symptoms", "cholesterol", "longevity", "anti-aging", "anti-ageing", "wellbeing", "well-being",
+          "health", "healthy"]
 COMPARE = re.compile(r"(?i)\b(better than|compared (to|with)|unlike (other|most|many)|versus|vs\.?|than (other|most|any))\b")
 EMOJI = re.compile("[\U0001F000-\U0001FAFF☀-➿⭐⬆↔-↪]")
 BULLETS = re.compile("[•·▪●✓✔★☆]")
@@ -938,9 +941,13 @@ SPELL = [("color", "colour"), ("colors", "colours"), ("colored", "coloured"), ("
 GB_LIKE = {"en-gb", "en-au", "en-nz", "en-ie", "en-za", "en-in", "en-sg", "en-uk"}
 
 
-def source_blob(prod, draft):
+def source_blob(prod, draft, claims_only=False):
+    """All of a product's own text. claims_only leaves out the category paths, which name a category
+    ("Health & Beauty") rather than make a claim, so they can't vouch for health wording."""
     parts = [prod.get("title", ""), prod.get("description_original", ""), prod.get("brand", ""),
-             prod.get("product_type", ""), prod.get("google_product_category", ""), prod.get("variant_label", "")]
+             prod.get("variant_label", "")]
+    if not claims_only:
+        parts += [prod.get("product_type", ""), prod.get("google_product_category", "")]
     parts += prod.get("highlights", [])
     parts += ["%s %s %s" % (d.get("section", ""), d.get("name", ""), d.get("value", "")) for d in prod.get("details", [])]
     parts += list(prod.get("attributes", {}).values())
@@ -1041,9 +1048,12 @@ def lint(prod, draft, all_drafts, lang):
            and not re.search(r"(?<![\w-])%s(?![\w-])" % re.escape(w), src_low)]
     if sup:
         W.append("superlative/hype word(s) not in the product data: %s" % ", ".join(sup))
-    hl = [w for w in HEALTH if re.search(r"(?<![\w-])%s(?![\w-])" % re.escape(w), low)]
+    claim_low = source_blob(prod, draft, claims_only=True).lower()
+    hl = [w for w in HEALTH if re.search(r"(?<![\w-])%s(?![\w-])" % re.escape(w), low)
+          and not re.search(r"(?<![\w-])%s(?![\w-])" % re.escape(w), claim_low)]
     if hl:
-        W.append("health/medical wording: %s - remove unless it is a plain spec stated in the data, never a health benefit" % ", ".join(hl))
+        W.append("health/medical wording not in this product's data or page: %s - keep a health claim only as the "
+                 "product's own data or page states it" % ", ".join(hl))
     caps = [w for w in words(text) if len(w) >= 4 and w.isupper() and w not in src]
     if caps:
         W.append("capitals not used in the product data (Google: no capitals for emphasis): %s" % ", ".join(sorted(set(caps))))
@@ -1271,7 +1281,7 @@ def cmd_build(a):
                 "health or medical claim" if re.search(r"health|medical", r) else "other"
             left_counts[r] = left_counts.get(r, 0) + 1
     flag_items = [("Facts needing your decision", len(conf)), ("Products held back (not in the feed file)", len(held) + len(skipped_err)),
-                  ("Descriptions with health-related wording to check", health)]
+                  ("Health wording not in the product's data", health)]
     flag_items += [("Left out: " + k, v) for k, v in sorted(left_counts.items(), key=lambda x: -x[1])]
     flag_items = [(l, n) for l, n in flag_items if n]
     if flag_items:

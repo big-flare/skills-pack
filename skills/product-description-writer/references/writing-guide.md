@@ -55,7 +55,7 @@ A conflict is two sources stating different values for the same fact: the produc
 - Links, web addresses, email addresses, phone numbers.
 - Comparisons with other products or brands.
 - Category paths ("Home > Kitchen > Bottles").
-- Health or medical claims, even when the original contains them: anything about treating, curing, relieving, preventing or improving a condition, pain, immunity, energy or wellbeing. A plain material spec that the data states (for example "antimicrobial-treated lining") can stay; a health benefit built on it cannot. Record health claims you leave out so the user can decide whether they can substantiate them.
+- Health or medical claims that the product's own data or product page does not make: anything about treating, curing, relieving, preventing or improving a condition, pain, immunity, energy or wellbeing. When the data or page does make a claim, keep it as the source states it: the same benefit, for the same condition, in wording no stronger than the source ("supports joint health" stays "supports" and never becomes "relieves joint pain"). A claim from the product page goes in `page.facts` in the page's words, like any page fact. Don't add claims, extend one to other conditions, or build one on an ingredient or spec: "antimicrobial-treated lining" is a spec, and "keeps you healthy" would be a new claim.
 - Superlatives and hype the data does not contain: best, perfect, ultimate, premium, luxury, world-class, amazing. If the data itself uses one (a product named "Ultimate Hoodie"), the name stays; do not add more.
 - Anything about other products, accessories or bundles that this item is not.
 
@@ -116,7 +116,7 @@ Save each product's result as one JSON object:
 
 > The best water bottle you'll ever own! Stay hydrated and energised all day with our premium bottle that keeps drinks ice cold for 24 hours. Perfect for the gym, the office and every adventure. Free shipping over $50.
 
-Problems: superlatives not in the data (best, premium, perfect), a health/wellbeing claim (hydrated and energised), a conflicting fact stated as true (24 hours), invented uses (gym, office, adventure), shipping text, an exclamation mark, and the variant is never named.
+Problems: superlatives not in the data (best, premium, perfect), a health/wellbeing claim the data doesn't make (hydrated and energised), a conflicting fact stated as true (24 hours), invented uses (gym, office, adventure), shipping text, an exclamation mark, and the variant is never named.
 
 **Good rewrite**
 
@@ -131,5 +131,6 @@ Every fact is in the data. The cold-drink claim is left out and recorded as a co
 - Does the first sentence name the exact product and this variant?
 - Is every fact in the text on the fact sheet, and every fact on the fact sheet either in the text or recorded as left out or conflicting?
 - Any number, claim, benefit or purpose phrase ("for easy travel", "ideal for …") that is not in the data? Remove it.
-- Any price, shipping, delivery or returns policy, promotion, link, comparison, health claim, hype word, exclamation mark or emoji? Remove it. (A warranty or trial period stated in the product's data stays.)
+- Any price, shipping, delivery or returns policy, promotion, link, comparison, hype word, exclamation mark or emoji? Remove it. (A warranty or trial period stated in the product's data stays.)
+- Any health claim the product's data or page doesn't make, or one worded more strongly than the source? Remove it, or go back to the source's wording.
 - Is it four or five full sentences in the run's language and spelling?
