@@ -1,7 +1,7 @@
 ---
 name: product-description-writer
 description: Rewrites Google Shopping product descriptions from each product's own feed data, giving every product and every variant its own clear, fact-only description, then outputs a supplemental feed you upload to Google Merchant Center to replace the descriptions in Shopping without touching your store or main feed. Also produces a before/after review page that flags every fact the sources disagree on, plus a simple A/B test plan. USE WHEN you want better Google Shopping descriptions, your feed descriptions are stripped bullet lists, shared across sizes or colours, thin or missing, or you want a supplemental feed of new descriptions. NOT for product titles, website or product-page copy, ad copy, or fixing feed errors other than descriptions.
-version: 1.1.0
+version: 1.1.1
 pack: big-flare-skills-pack
 ---
 

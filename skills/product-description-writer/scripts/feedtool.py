@@ -364,6 +364,26 @@ def common_title_prefix(titles):
     return (" ".join(out) + " ") if out else ""
 
 
+SEP_TOKEN = re.compile(r"^[-|/,:–—]+$")
+
+
+def common_title_suffix(titles):
+    """Shared ending of every title that starts at a separator, e.g. " | Store Name - Slogan".
+
+    Only cut from a separator so a shared unit stays with its value ("500 ml" / "750 ml" keep "ml")."""
+    out = []
+    for parts in zip(*[t.split()[::-1] for t in titles]):
+        if all(p == parts[0] for p in parts):
+            out.append(parts[0])
+        else:
+            break
+    out.reverse()
+    for i, w in enumerate(out):
+        if SEP_TOKEN.match(w):
+            return " " + " ".join(out[i:])
+    return ""
+
+
 def build_groups(rows, id_key):
     """Return dict id -> group info (group key, members, variant attrs)."""
     groups = {}
@@ -383,6 +403,7 @@ def build_groups(rows, id_key):
             if len(members) > 1 and len(vals) > 1:
                 varying.append(k)
         prefix = common_title_prefix([first(m, "title") for m in members]) if len(members) > 1 else ""
+        suffix = common_title_suffix([first(m, "title") for m in members]) if len(members) > 1 else ""
         vo_differs = len(members) > 1 and not varying and len({first(m, "variant_option") for m in members}) > 1
         for m in members:
             pid = first(m, id_key)
@@ -396,6 +417,8 @@ def build_groups(rows, id_key):
             elif len(members) > 1 and prefix and key.startswith(("g:", "d:")):
                 t = first(m, "title")
                 rest = t[len(prefix):] if t.startswith(prefix) else ""
+                if suffix and rest.endswith(suffix) and len(rest) > len(suffix):
+                    rest = rest[:-len(suffix)]  # drop a shared " | Store - Slogan" ending
                 rest = rest.strip(" -|/,:–—")
                 label = rest
                 parts = [p.strip() for p in re.split(r"\s*[/|,]\s*", rest) if p.strip()] if rest else []
