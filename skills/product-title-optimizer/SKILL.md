@@ -1,7 +1,7 @@
 ---
 name: product-title-optimizer
 description: Rewrites Google Shopping product titles around what shoppers actually search, using the store's own Google Ads search terms (pulled through a Google Ads connection or from an uploaded report), Keyword Planner and the store's website, then outputs a supplemental feed you upload to Google Merchant Center to replace the titles in Shopping without touching your store or main feed. Also produces an editable review workbook and a before/after review page. USE WHEN you want better Google Shopping titles, your titles are short or written for browsing rather than searching, variants share one title, or you want a supplemental feed of new titles. NOT for product descriptions, website or product-page copy, ad copy, or fixing feed errors other than titles.
-version: 2.0.0
+version: 2.0.1
 pack: big-flare-skills-pack
 ---
 
