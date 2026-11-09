@@ -70,7 +70,7 @@ Feed tools differ, so give users the principle, not button clicks:
 
 1. Pick a handful of top sellers (5 to 10 products is plenty to start).
 2. Duplicate them where products enter Merchant Center (the feed app, store app or primary feed), with new item IDs. A supplemental feed cannot create the duplicates.
-3. Give each duplicate a distinct landing-page URL parameter (for example `?desc_test=b`) so Merchant Center treats it as a separate item rather than merging it with the original.
+3. Change nothing else on the duplicates, links included. The new item ID is what makes Google treat a duplicate as a separate offer, and any other difference muddies the result.
 4. Give only the duplicates the new descriptions (in the duplicate rows themselves, or with supplemental rows keyed to the duplicates' IDs).
 5. Run originals and duplicates in the same campaign for 4 to 6 weeks.
 6. Compare impressions, clicks, revenue and ROAS for each original against its duplicate, by item ID.

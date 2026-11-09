@@ -1,7 +1,7 @@
 ---
 name: product-description-writer
 description: Rewrites Google Shopping product descriptions from each product's own feed data, giving every product and every variant its own clear, fact-only description, then outputs a supplemental feed you upload to Google Merchant Center to replace the descriptions in Shopping without touching your store or main feed. Also produces a before/after review page that flags every fact the sources disagree on, plus a simple A/B test plan. USE WHEN you want better Google Shopping descriptions, your feed descriptions are stripped bullet lists, shared across sizes or colours, thin or missing, or you want a supplemental feed of new descriptions. NOT for product titles, website or product-page copy, ad copy, or fixing feed errors other than descriptions.
-version: 1.0.0
+version: 1.0.1
 pack: big-flare-skills-pack
 ---
 
@@ -148,7 +148,7 @@ Give the user:
 3. The decisions list (or "none").
 4. Short next steps, kept general because feed tools differ (full version in `references/merchant-center-rules.md`):
    - **Upload:** in Google Merchant Center, add a supplemental product data source (upload the `.tsv`, or paste it into a Google Sheet and connect the sheet) and link it to the primary data source the products come from. In the current Merchant Center the supplemental sources tab appears once the "Advanced data source management" add-on is on. Check the source's processing report after the first upload: any ID that doesn't match shows up there. Removing the source brings the original descriptions back.
-   - **A/B test before rolling out:** duplicate a handful of top sellers with new item IDs where your products enter Merchant Center (a supplemental feed can't create them), give each duplicate a distinct landing-page URL parameter so Merchant Center doesn't merge it with the original, give only the duplicates the new descriptions, run both in the same campaign for 4–6 weeks, then compare impressions, clicks, revenue and ROAS by item ID and keep the winner.
+   - **A/B test before rolling out:** duplicate a handful of top sellers with new item IDs where your products enter Merchant Center (a supplemental feed can't create them), change nothing else on them (the links stay the same), give only the duplicates the new descriptions, run both in the same campaign for 4–6 weeks, then compare impressions, clicks, revenue and ROAS by item ID and keep the winner.
 
 Offer natural next steps: resolve the conflicts and rerun the affected products, do the next batch of products, or write descriptions for the A/B-test duplicates' IDs.
 
