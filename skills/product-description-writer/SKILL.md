@@ -1,7 +1,7 @@
 ---
 name: product-description-writer
 description: Rewrites Google Shopping product descriptions from each product's own feed data, giving every product and every variant its own clear, fact-only description, then outputs a supplemental feed you upload to Google Merchant Center to replace the descriptions in Shopping without touching your store or main feed. Also produces a before/after review page that flags every fact the sources disagree on, plus a simple A/B test plan. USE WHEN you want better Google Shopping descriptions, your feed descriptions are stripped bullet lists, shared across sizes or colours, thin or missing, or you want a supplemental feed of new descriptions. NOT for product titles, website or product-page copy, ad copy, or fixing feed errors other than descriptions.
-version: 1.0.1
+version: 1.0.2
 pack: big-flare-skills-pack
 ---
 
@@ -146,8 +146,14 @@ Give the user:
 1. The two files, with their paths.
 2. Three to five lines on what you found: how many descriptions were written, how many variants now have their own text, the biggest problem with the originals, and how many facts need a decision.
 3. The decisions list (or "none").
-4. Short next steps, kept general because feed tools differ (full version in `references/merchant-center-rules.md`):
-   - **Upload:** in Google Merchant Center, add a supplemental product data source (upload the `.tsv`, or paste it into a Google Sheet and connect the sheet) and link it to the primary data source the products come from. In the current Merchant Center the supplemental sources tab appears once the "Advanced data source management" add-on is on. Check the source's processing report after the first upload: any ID that doesn't match shows up there. Removing the source brings the original descriptions back.
+4. Short next steps (full version in `references/merchant-center-rules.md`):
+   - **Upload, step by step**, with the file's real name filled in. These are the same steps as the review page's "What to do next", and they are the same for every store because everyone uploads in Merchant Center:
+     1. Settings (gear icon) → Add-ons → turn on "Advanced data source management". Once only; without it the Supplemental sources tab doesn't show.
+     2. Settings → Data sources → "Supplemental sources" tab → "Add supplemental product data".
+     3. "A file": the file's exact name, extension included, then upload the file. If asked for a feed label and language, use the main feed's.
+     4. Pick the primary data source the products come from → "Create data source".
+     5. Allow up to a day, then check the source processed without errors. Rows whose `id` matches no product are ignored.
+     Deleting the source brings the original descriptions back. The menu names come from Google's help (checked November 2026); if the user says a menu has moved, point them to Merchant Center Help for "supplemental data source" rather than guessing a new path.
    - **A/B test before rolling out:** duplicate a handful of top sellers with new item IDs where your products enter Merchant Center (a supplemental feed can't create them), change nothing else on them (the links stay the same), give only the duplicates the new descriptions, run both in the same campaign for 4–6 weeks, then compare impressions, clicks, revenue and ROAS by item ID and keep the winner.
 
 Offer natural next steps: resolve the conflicts and rerun the affected products, do the next batch of products, or write descriptions for the A/B-test duplicates' IDs.

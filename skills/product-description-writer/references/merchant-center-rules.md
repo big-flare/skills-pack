@@ -49,6 +49,18 @@ If a user's tool cannot take the third column, a two-column file (`id`, `descrip
 - You choose which primary data source(s) it applies to when you create it.
 - In the current Merchant Center the "Supplemental sources" tab only shows once the "Advanced data source management" add-on is turned on (Settings, then Add-ons).
 - Inputs: a file, a Google Sheets template, or the API.
+
+## Upload steps (current Merchant Center, checked November 2026)
+
+From Google's "Create a product data source" page. Give users these, with the real file name:
+
+1. Settings (gear icon) → Add-ons → turn on "Advanced data source management". Once per account; without it the "Supplemental sources" tab doesn't appear.
+2. Settings → Data sources → "Supplemental sources" tab → "Add supplemental product data".
+3. Choose "A file" and follow the prompts. The file name must exactly match the uploaded file, extension included. If asked for a data source (feed) label and language, match the primary data source.
+4. Select the primary data source to add the data to, then "Create data source".
+5. Allow up to a day for processing, then check the source for errors. Rows whose IDs aren't in the primary source aren't applied.
+
+Google's page also lists "A Google Sheets template" as a source type but gives no supplemental-specific steps for it, so offer the file route first. Google's help does not describe deleting a supplemental source in detail; removing it means its overrides stop applying once Merchant Center reprocesses.
 - Removing the supplemental source removes its overrides; products go back to their primary-source values once Merchant Center reprocesses them.
 
 ## File format
