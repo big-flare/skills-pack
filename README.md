@@ -9,6 +9,7 @@ Each skill is a complete, repeatable workflow — the same processes we run for 
 | Skill | What it does | Video |
 |---|---|---|
 | [user-review-report](skills/user-review-report/) | Mines a brand's customer reviews across Trustpilot, regional review platforms, Reddit, and editorial press, then turns the patterns into ad copy direction, a voice-of-customer phrase bank, and landing page recommendations — delivered as a written analysis plus a polished HTML report. Got Google Ads connected? It pulls your live ad copy and grades every headline against what customers actually say (a pasted export works too). | Coming soon |
+| [product-description-writer](skills/product-description-writer/) | Rewrites your Google Shopping product descriptions from each product's own feed data, so every product and every variant gets its own clear, fact-only description. You get a supplemental feed to upload to Google Merchant Center (it replaces the descriptions in Shopping without touching your store or main feed), a before/after review page that flags any facts your sources disagree on, and a simple A/B test plan. | Coming soon |
 
 More skills are added over time — watch the [Big Flare YouTube channel](https://www.youtube.com/channel/UCKEZmHEEOMuvT2PBU3owpQA) to see each one in action when it lands.
 
@@ -42,7 +43,7 @@ cp -R skills/user-review-report /path/to/your/project/.claude/skills/
 ## How these skills are built
 
 - **Self-contained** — everything a skill needs lives in its folder. No external dependencies, no accounts, no API keys required.
-- **Baseline tools only** — skills run on Claude's standard web search and file tools. Where an integration helps (e.g. a Google Ads connection), it's optional and the skill works without it.
+- **Baseline tools only** — skills run on Claude's standard web search and file tools. Where an integration helps (e.g. a Google Ads connection), it's optional and the skill works without it. Some skills include a small helper script (plain Python, nothing to install) that makes the mechanical steps faster and more reliable; they still work without it.
 - **Works everywhere** — Claude Code, Claude Desktop (Cowork), and claude.ai.
 - **Re-brandable output** — report templates use a single design-token block you can swap for your own brand colours.
 

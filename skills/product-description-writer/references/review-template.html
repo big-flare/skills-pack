@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{STORE}} — Product Description Review</title>
+<!--
+  PRODUCT DESCRIPTION REVIEW TEMPLATE — Big Flare Skills Pack
+  Structure: brand header → cover → stat row → up to 3 data visuals →
+  01 Decisions for you → 02 Before and after → 03 What to do next → footer credit.
+  scripts/feedtool.py `build` fills {{...}} placeholders and the CONTENT marker.
+  Filling it by hand instead? Copy this file, replace the placeholders, and put the
+  content where the CONTENT marker is, using the component markup shown in the
+  "Component reference" comment at the bottom. Never retype the brand header:
+  the logo is a long embedded image that does not survive retyping.
+  To re-brand: change ONLY the :root token values below. Keep the brand header and footer.
+-->
+<style>
+:root {
+  /* ==== brand tokens — swap these for your brand ==== */
+  --paper: #f6f6f4;        /* page background */
+  --card: #ffffff;         /* card background */
+  --ink: #1a1a1a;          /* headings / primary text */
+  --ink-2: #52525b;        /* body text */
+  --ink-3: #71717a;        /* captions / muted */
+  --accent: #b42318;       /* ONE focal accent — flags, decisions */
+  --accent-soft: rgba(180, 35, 24, 0.08);
+  --pos: #1a7f64;          /* the new descriptions */
+  --pos-soft: rgba(26, 127, 100, 0.09);
+  --muted-bar: #a1a1aa;    /* the old descriptions */
+  --border: rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  /* ================================================== */
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--paper); color: var(--ink); line-height: 1.6; font-size: 16px;
+}
+.container { max-width: 1000px; margin: 0 auto; padding: 28px 24px 72px; }
+h1, h2, h3 { line-height: 1.15; letter-spacing: -0.01em; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+
+/* ---- Brand header (keep intact — same as the footer credit) ---- */
+.brand-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.brand-mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand-mark img { display: block; }
+.brand-mark .brand-name { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; }
+.brand-bar .brand-tag { font-size: 12.5px; color: var(--ink-3); }
+.brand-bar .brand-tag a { color: var(--ink-2); font-weight: 600; text-decoration: none; }
+
+.cover { text-align: center; padding: 40px 0 36px; }
+.cover .eyebrow { display: block; margin-bottom: 16px; }
+.cover h1 { font-size: 42px; font-weight: 800; max-width: 760px; margin: 0 auto 14px; }
+.cover h1 .hot { color: var(--pos); }
+.cover .subtitle { color: var(--ink-2); font-size: 18px; max-width: 640px; margin: 0 auto 24px; }
+.meta-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.pill { background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 6px 16px; font-size: 13.5px; color: var(--ink-2); }
+.pill strong { color: var(--ink); }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 32px 0 28px; }
+.stat-card { background: var(--card); border-radius: var(--radius); padding: 24px 16px; text-align: center; box-shadow: var(--shadow); }
+.stat-card .num { font-size: 30px; font-weight: 800; }
+.stat-card.hot .num { color: var(--accent); }
+.stat-card .lbl { font-size: 12.5px; color: var(--ink-3); margin-top: 8px; line-height: 1.4; }
+
+/* ---- Visuals ---- */
+.viz-card { background: var(--card); border-radius: var(--radius); padding: 26px 30px; box-shadow: var(--shadow); margin-bottom: 20px; }
+.viz-title { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 18px; }
+.viz-note { font-size: 12px; color: var(--ink-3); margin-top: 12px; }
+/* horizontal bars */
+.hbar-row { display: grid; grid-template-columns: minmax(150px, 290px) 1fr 70px; align-items: center; gap: 14px; margin-bottom: 10px; }
+.hbar-label { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.hbar-track { height: 14px; background: var(--paper); border-radius: 999px; overflow: hidden; }
+.hbar-fill { display: block; height: 100%; border-radius: 999px; background: var(--muted-bar); }
+.hbar-fill.accent { background: var(--accent); }
+.hbar-val { font-size: 12.5px; color: var(--ink-3); text-align: right; }
+/* dumbbell: length before -> after */
+.db-legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--ink-3); margin-bottom: 12px; }
+.db-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.db-dot-key { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.db-dot-key.before { background: var(--muted-bar); }
+.db-dot-key.after { background: var(--pos); }
+.db-band-key { width: 16px; height: 10px; background: var(--pos-soft); border: 1px solid var(--pos); display: inline-block; }
+.db-mark-key { width: 0; height: 12px; border-left: 2px dashed var(--ink-3); display: inline-block; }
+.db-wrap { position: relative; }
+.db-guides { position: absolute; top: 0; bottom: 0; left: calc(min(36%, 300px) + 12px); right: 92px; pointer-events: none; }
+.db-band { position: absolute; top: 0; bottom: 0; background: var(--pos-soft); }
+.db-mark { position: absolute; top: 0; bottom: 0; border-left: 2px dashed var(--ink-3); opacity: 0.45; }
+.db-row { display: grid; grid-template-columns: min(36%, 300px) 1fr 80px; align-items: center; gap: 12px; height: 26px; position: relative; }
+.db-label { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-track { position: relative; height: 26px; }
+.db-line { position: absolute; top: 12px; height: 2px; background: var(--ink-3); opacity: 0.35; }
+.db-dot { position: absolute; top: 7px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; }
+.db-dot.before { background: var(--muted-bar); }
+.db-dot.after { background: var(--pos); }
+.db-val { font-size: 12px; color: var(--ink-3); text-align: right; white-space: nowrap; }
+
+.section { margin: 52px 0 56px; }
+.section-head { margin-bottom: 24px; }
+.section-head .eyebrow { display: block; margin-bottom: 8px; }
+.section-head h2 { font-size: 30px; font-weight: 800; }
+.section-head p { color: var(--ink-2); margin-top: 8px; max-width: 720px; }
+
+.tbl-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 18px; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card); font-size: 14px; }
+th { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+td { padding: 14px 18px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--ink-2); line-height: 1.55; }
+tr:last-child td { border-bottom: none; }
+td:first-child { font-weight: 600; color: var(--ink); min-width: 170px; }
+td .ids { font-weight: 400; font-size: 12px; color: var(--ink-3); margin-top: 4px; word-break: break-all; }
+td .says + .says { margin-top: 6px; }
+.verdict-risk { color: var(--accent); font-weight: 600; }
+
+.note-card { background: var(--card); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); color: var(--ink-2); margin-bottom: 18px; }
+.avoid { background: var(--card); border-radius: var(--radius); padding: 24px 28px; box-shadow: var(--shadow); }
+.avoid h3 { font-size: 16px; margin-bottom: 10px; }
+.avoid ul { list-style: none; }
+.avoid li { padding: 9px 0 9px 22px; position: relative; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--border); }
+.avoid li:last-child { border-bottom: none; }
+.avoid li::before { content: ''; position: absolute; left: 2px; top: 17px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+.ba-card { background: var(--card); border-radius: var(--radius); padding: 22px 26px; margin-bottom: 16px; box-shadow: var(--shadow); }
+.ba-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.ba-head h3 { font-size: 17px; }
+.ba-id { font-size: 12px; color: var(--ink-3); word-break: break-all; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: var(--pos-soft); color: var(--pos); border-radius: 999px; padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
+.ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ba-col { border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.65; }
+.ba-col.before { background: var(--paper); color: var(--ink-3); }
+.ba-col.after { background: var(--pos-soft); color: var(--ink); }
+.ba-lbl { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+.ba-col.after .ba-lbl { color: var(--pos); }
+.ba-meta { list-style: none; margin-top: 12px; font-size: 12.5px; color: var(--ink-3); }
+.ba-meta li { padding: 3px 0 3px 16px; position: relative; }
+.ba-meta li::before { content: ''; position: absolute; left: 2px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.6; }
+
+.steps { counter-reset: st; }
+.step { background: var(--card); border-radius: var(--radius); padding: 20px 24px 20px 66px; margin-bottom: 12px; position: relative; box-shadow: var(--shadow); }
+.step::before { counter-increment: st; content: counter(st, decimal-leading-zero); position: absolute; left: 22px; top: 20px; font-size: 20px; font-weight: 800; color: var(--pos); opacity: 0.5; }
+.step h3 { font-size: 16.5px; margin-bottom: 4px; }
+.step p { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+.step p + p { margin-top: 6px; }
+.step code { font-size: 13px; background: var(--paper); border-radius: 6px; padding: 1px 6px; }
+
+.footer { text-align: center; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); font-size: 13px; color: var(--ink-3); }
+.footer a { color: var(--ink-2); font-weight: 600; }
+
+@media (max-width: 720px) {
+  .container { padding: 20px 16px 56px; }
+  .cover h1 { font-size: 30px; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .ba-grid { grid-template-columns: 1fr; }
+  .hbar-row { grid-template-columns: 1fr 64px; }
+  .hbar-row .hbar-label { grid-column: 1 / -1; }
+  .db-row { grid-template-columns: 1fr 70px; height: auto; row-gap: 0; }
+  .db-row .db-label { grid-column: 1 / -1; }
+  .db-guides, .db-legend .guide-key { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Brand header — keep intact, same as the footer credit -->
+  <div class="brand-bar">
+    <a class="brand-mark" href="https://bigflare.com">
+      <img src="data:image/png;base64,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" width="30" height="30" alt="Big Flare">
+      <span class="brand-name">Big Flare</span>
+    </a>
+    <span class="brand-tag">Product Description Review · <a href="https://bigflare.com">bigflare.com</a></span>
+  </div>
+
+  <div class="cover">
+    <span class="eyebrow">Google Shopping descriptions</span>
+    <h1>New product descriptions for <span class="hot">{{STORE}}</span></h1>
+    <p class="subtitle">Written only from each product's own data. Review the flagged facts, then upload the supplemental feed and test it against your current descriptions.</p>
+    <div class="meta-pills">
+      <span class="pill"><strong>Store:</strong> {{STORE}}</span>
+      <span class="pill"><strong>Date:</strong> {{DATE}}</span>
+      <span class="pill"><strong>Language:</strong> {{LANG}}</span>
+      <span class="pill"><strong>Feed file:</strong> {{TSV_NAME}}</span>
+    </div>
+  </div>
+
+<!--{{CONTENT}}-->
+
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Section {{SEC_NEXT}}</span>
+      <h2>What to do next</h2>
+      <p>Test before you roll out. New descriptions are a change like any other, so prove they win on your own products first.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Resolve the decisions above</h3><p>Fix any conflicting fact at its source (your product page or feed), or tell your copywriter which version is right. The new descriptions leave those facts out until then.</p></div>
+      <div class="step"><h3>Upload <code>{{TSV_NAME}}</code> as a supplemental data source</h3><p>In Google Merchant Center, add a supplemental product data source (upload the file, or paste it into a Google Sheet and connect the sheet) and link it to the primary data source your products come from. Rows match your products on <code>id</code>, so the new text replaces the description in Shopping without touching your store or your main feed.</p><p>The file also carries a <code>structured_description</code> column marked as AI-generated, because Google's rules ask for AI-written descriptions to be declared that way. Remove the supplemental source and the original descriptions come back.</p></div>
+      <div class="step"><h3>A/B test on a handful of top sellers</h3><p>Duplicate a few top-selling products with new item IDs, and give each duplicate a distinct landing-page URL parameter so Merchant Center keeps them separate. Give only the duplicates the new descriptions, and run originals and duplicates in the same campaign.</p></div>
+      <div class="step"><h3>Compare after 4&ndash;6 weeks, keep the winner</h3><p>Compare impressions, clicks, revenue and ROAS for each original against its duplicate. Roll the winning descriptions out to the rest of the catalogue, and remove the losing copies.</p></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Built with the <a href="https://github.com/big-flare/skills-pack">Big Flare Skills Pack</a> — free Claude skills for ecommerce marketers, by <a href="https://bigflare.com">Big Flare</a>.
+  </div>
+
+</div>
+<!--
+  Component reference (for filling the CONTENT marker by hand — the script generates the same markup):
+
+  Stat row (always, four cards):
+    <div class="stat-row">
+      <div class="stat-card"><div class="num">24</div><div class="lbl">new descriptions ready to upload</div></div>
+      <div class="stat-card"><div class="num">18</div><div class="lbl">variants now named in their own description</div></div>
+      <div class="stat-card"><div class="num">412&rarr;676</div><div class="lbl">average characters, before &rarr; after</div></div>
+      <div class="stat-card hot"><div class="num">2</div><div class="lbl">facts that need your decision</div></div>
+    </div>
+
+  Visual 1 — what was wrong with the originals (drop rows that are 0; drop the card if all are 0):
+    <div class="viz-card"><div class="viz-title">What was wrong with the original descriptions</div>
+      <div class="hbar-row"><span class="hbar-label">Same text shared with another product</span><span class="hbar-track"><span class="hbar-fill" style="width:75%"></span></span><span class="hbar-val">18 of 24</span></div>
+      <div class="viz-note">Counted across the 24 products in this run.</div></div>
+
+  Visual 2 — length before and after (one row per product, positions are % of the scale max):
+    <div class="viz-card"><div class="viz-title">Length, before and after (characters)</div>
+      <div class="db-wrap"><div class="db-guides"><span class="db-band" style="left:60%;width:15%"></span><span class="db-mark" style="left:50%"></span></div>
+      <div class="db-row"><span class="db-label">Product title</span><span class="db-track"><span class="db-line" style="left:41%;width:27%"></span><span class="db-dot before" style="left:41%"></span><span class="db-dot after" style="left:68%"></span></span><span class="db-val">410 &rarr; 680</span></div>
+      </div></div>
+
+  Visual 3 — flags for review (only if there are any): same .hbar-row markup with class "hbar-fill accent".
+
+  Section 01 Decisions for you: a table (Product | Fact | What each source says | In the new copy) and, if any
+  products were held back, an <div class="avoid"><h3>Held back</h3><ul><li>…</li></ul></div>.
+
+  Section 02 Before and after, one card per product:
+    <div class="ba-card"><div class="ba-head"><div><h3>Title</h3><span class="ba-id">ID</span></div><div class="chips"><span class="chip">Variant</span></div></div>
+      <div class="ba-grid"><div class="ba-col before"><span class="ba-lbl">Before · 410 characters</span><p>…</p></div>
+      <div class="ba-col after"><span class="ba-lbl">After · 680 characters · 5 sentences</span><p>…</p></div></div>
+      <ul class="ba-meta"><li>Left out: "…" (reason)</li></ul></div>
+-->
+</body>
+</html>
