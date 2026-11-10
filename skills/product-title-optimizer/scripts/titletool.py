@@ -1033,10 +1033,12 @@ def decide_brand(brands, store, case_override="", end_override=None):
         else:
             end = top[0][0] if top else (store or "")
     else:
-        end = ""
-        notes.append("Reseller: each product's own brand goes in the first half of its title. The store's name is not "
-                     "added, because Google's title rules say not to add your company's name. Use --end-brand NAME "
-                     "only if the user asks for it.")
+        end = store or ""
+        notes.append("Reseller: each product's own brand goes in the first half of its title, and the store's name ends "
+                     "every title. Google's title page says not to add your company's name: tell the user once, and use "
+                     "--no-end-brand only if they want the store name left off.")
+        if not store:
+            notes.append("No store name to end the titles with: pass --store (or --no-end-brand).")
     if not end and case == "own":
         notes.append("No brand name to end the titles with: pass --store or --end-brand.")
     if labels:
@@ -1709,8 +1711,7 @@ def lint(prod, draft, all_drafts, cfg, search_vocab):
             W.append("'%s' also appears before the last section: keep the front for words people search" % end)
     store = cfg.get("store") or ""
     if not end and store and not same_name(store, prod.get("brand", "")) and store.lower() in low:
-        W.append("the store's name '%s' is in the title: Google's title rules say not to add your company's name "
-                 "(keep it only if the user asked for it)" % store)
+        W.append("the store's name '%s' is in the title, but this run ends titles without it (--no-end-brand)" % store)
     pb = prod.get("brand", "")
     if needs_product_brand(pb, cfg.get("brand_case"), end):
         i = low.find(pb.lower())
@@ -2063,10 +2064,12 @@ def build_outputs(run, force):
     facts.append("<li><strong>Keyword Planner:</strong> %s</li>" % (
         "%d keyword ideas with search volumes." % len(planner) if planner else "not used."))
     facts.append("<li><strong>Brand:</strong> %s</li>" % (
-        "your brand <em>%s</em> ends every title, so the front stays free for the words people search." % esc(cfg["end_brand"])
+        ("your store name <em>%s</em> ends every title, and each product's own brand sits in the first half." % esc(cfg["end_brand"])
+         if cfg.get("brand_case") == "reseller" else
+         "your brand <em>%s</em> ends every title, so the front stays free for the words people search." % esc(cfg["end_brand"]))
         if cfg.get("end_brand") else
-        "each product's own brand sits in the first half of its title. Your store name is not added, because Google's "
-        "title rules say not to add your company's name." if cfg.get("brand_case") == "reseller" else
+        "each product's own brand sits in the first half of its title, and your store name is left off, as you asked."
+        if cfg.get("brand_case") == "reseller" else
         "no brand name is added at the end."))
     facts.append("<li><strong>Research:</strong> %d of %d categories have saved notes (see the Research tab of the workbook).</li>"
                  % (len([c for c in research if c in {x['category'] for x in products}]), len({x["category"] for x in products})))

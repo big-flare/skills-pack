@@ -1,7 +1,7 @@
 ---
 name: product-title-optimizer
 description: Rewrites Google Shopping product titles around what shoppers actually search, using the store's own Google Ads search terms (pulled through a Google Ads connection or from an uploaded report), Keyword Planner and the store's website, then outputs a supplemental feed you upload to Google Merchant Center to replace the titles in Shopping without touching your store or main feed. Also produces an editable review workbook and a before/after review page. USE WHEN you want better Google Shopping titles, your titles are short or written for browsing rather than searching, variants share one title, or you want a supplemental feed of new titles. NOT for product descriptions, website or product-page copy, ad copy, or fixing feed errors other than titles.
-version: 2.0.1
+version: 2.1.0
 pack: big-flare-skills-pack
 ---
 
@@ -47,7 +47,7 @@ It reports the item ID column, variant groups, brands, categories, what is wrong
 
 - **The item ID column:** the feed's `id` (`g:id`, item ID, offer ID). It must be exact: Merchant Center matches supplemental rows by exact, case-sensitive ID and silently skips the rest. Stop and tell the user, rather than guessing, if there is no ID column or the IDs show scientific notation (`1.23E+13`).
 - **Language and spelling:** the feed's language and market spelling (colour or color). Titles are written in it.
-- **The brand rule:** whether the store sells its own brand (that name ends every title) or resells other brands (each product's brand goes in the first half; the store's name is left out, per Google's rules). See `references/title-guide.md`, Brand.
+- **The brand rule:** the store's name ends every title. When the store resells other brands, each product's own brand also goes in the first half of its title. For a reseller, add that Google's title page says not to add "your company's name", so they can have the store name left off if they prefer. See `references/title-guide.md`, Brand.
 
 For example: "I'll match on the `id` column (e.g. SKU-1001), write in English with UK spelling (prices are in GBP), and end each title with your brand, Loma Studio."
 
@@ -187,7 +187,7 @@ Offer natural next steps: the next batch of products, a rerun with search data i
 
 - **Ask the search data question every run** (Step 2), and never present your own keyword ideas as search data. Every phrase's recorded source is its true source.
 - **150 characters is a hard limit.** Count with code, never by eye, and check the final title, including after the user's edits.
-- **Own brand last; a resold brand in the first half.** Don't add the store's own name to a reseller's titles unless the user asks for it.
+- **The store's name last; a resold brand in the first half.** Leave the store's name off only if the user asks.
 - **Every variant's distinguishing values stay in its title, copied exactly.** Never guess, swap or invent a variant.
 - **Numbers come only from the product's data.** No invented sizes, counts or specs.
 - **Nothing promotional:** no prices, sales, shipping, dates, exclamation marks, capitals for emphasis, or "best"-type words that nobody searches.

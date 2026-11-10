@@ -13,7 +13,7 @@ Read this before writing the end-of-run instructions, and whenever a user asks w
 - **No gimmicks:** no all caps, symbols, HTML tags, extra white space, or foreign characters used to grab attention.
 - **Language:** the title must be in the data source's language. Foreign words only when they are well understood.
 
-**The company-name rule and the brand at the end.** When a store sells its own brand, the store's name is the product's brand, which Google asks you to include, so this skill ends every title with it. When a store resells other brands, the product's brand goes in the first half of the title and the store's own name is left out, because that is "your company's name". The user can choose to add it anyway (`--end-brand`); tell them it goes against Google's written rule.
+**The company-name rule and the brand at the end.** When a store sells its own brand, the store's name is the product's brand, which Google asks you to include. This skill ends every title with it. When a store resells other brands, the product's brand goes in the first half of the title and the store's name still ends it. That is Big Flare's tested practice, but Google's title page does say not to add "your company's name", so a store that wants to follow the page to the letter can leave its name off (`--no-end-brand`). Tell users this once, when you state the brand rule.
 
 ## AI-written titles: `structured_title`
 

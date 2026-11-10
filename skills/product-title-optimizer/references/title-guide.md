@@ -61,7 +61,7 @@ There are two different brands, and they are handled differently.
 - **The store's own brand.** When the store sells its own products, the brand ends every title, in the last section. Brand searchers find the product anyway. People who don't know the brand yet search for the product, so the front of the title is kept for their words. A title that starts with the brand wastes its most valuable space.
 - **A brand the store resells.** When the store sells other makers' products, each product's brand goes in the **first half** of its title, next to what the product is: people search "corvane backpack". Leaving it out means brand searches won't match.
 
-In the reseller case, the store's own name is **not** added to the title. Google's title rules say not to add your company's name. Add it only if the user explicitly asks for it.
+In the reseller case the store's own name still ends every title, in the last section, as it does for an own-brand store. Google's title page says not to add "your company's name", so a user who would rather follow that strictly can leave the store name off (`--no-end-brand`); mention the choice once, in the settings line, and don't ask about it unless the user raises it.
 
 The helper script works out which case applies from the feed's brand values and tells you which name (if any) ends the titles. State it to the user in one line.
 
@@ -105,9 +105,9 @@ People search "10mm yoga mat" and "green yoga mat", so the thickness and colour 
 
 **A brand the store resells** (store: a retailer; product brand: Corvane):
 
-`Corvane Summit 45L Hiking Backpack - Slate Blue | Lightweight Trekking Rucksack for Men & Women | Waterproof Daypack with Rain Cover`
+`Corvane Summit 45L Hiking Backpack - Slate Blue | Lightweight Trekking Rucksack | Waterproof Daypack with Rain Cover | Trailhead Supply`
 
-The product's brand is in the first section, next to what the product is. The searched capacity "45L" stays at the front. The retailer's own name is not added.
+The product's brand is in the first section, next to what the product is. The searched capacity "45L" stays at the front. The retailer's own name, Trailhead Supply, ends the title.
 
 **A variant group with one template** (store: Tidewell):
 
@@ -123,7 +123,7 @@ Same structure, only the size and colour swapped, both copied exactly from the p
 - Is every phrase earning its place: searched, or plainly how people would search?
 - Are overlapping phrases merged, with nothing repeated in exact word order?
 - Are the variant values present and copied exactly? Is non-searched detail in the middle, not the front?
-- Brand rule: own brand last, or the resold brand in the first half?
+- Brand rule: the store's name last, plus the resold brand in the first half when the store resells other brands?
 - 130 to 150 characters, measured with code, not by eye?
 - Nothing promotional, no prices, dates, capitals for emphasis, or numbers that aren't in the data?
 - Does it still read as a sensible product name to a person who sees only the first 70 characters?
