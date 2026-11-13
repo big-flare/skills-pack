@@ -49,25 +49,27 @@ Every query uses the date range, so settle it before anything else. Recommend th
 
 Resolved means the user picked an option or gave dates. Convert it to two dates (YYYY-MM-DD). The end date is yesterday unless they said otherwise: today is incomplete. The Account and Search Volume tabs always cover 1 January last year to the end date, whatever the range.
 
+Ask Steps 1 and 2 together, in one message. If the user picks the demo data in Step 2, the dates don't apply: the demo covers 1 August to 31 October 2026, so say so and move on.
+
 ## Step 2 — Gate: where the data comes from. Ask this every run.
 
-**Ask it every run and do not go on until it is resolved.** Offer only the routes that exist in this session, numbered from 1 in this order:
+**Ask it every run and do not go on until it is resolved.** Offer only the routes that exist in this session, in this order, and number the ones you offer from 1. The first is only for a session with a Google Ads connection that runs GAQL queries:
 
-> "Where should the data come from? **(1)** I can pull it from your Google Ads account now [only if a Google Ads connection that runs GAQL queries is available in this session], **(2)** you run a read-only Google Ads Script I'll give you: it takes about 2 minutes and saves one file to your Google Drive that you send me, or **(3)** I build it from demo data so you can see what the report looks like first."
+> "Where should the data come from? I can **pull it from your Google Ads account now**; or you **run a read-only Google Ads Script** I'll give you, which takes about 2 minutes and saves one file to your Google Drive for you to send me; or I **build it from demo data** so you can see what the report looks like first."
 
-Ask in the same message as Step 1 when both are open. Resolved means the user picked a route or has already sent a data file. "Whatever works" is not a choice: recommend the connection if there is one, otherwise the script, and ask again. A large account (hundreds of products or campaigns, or a year or more of data) is often more reliable through the script, because a connection can return results too big to handle.
+Resolved means the user picked a route or has already sent a data file. "Whatever works" is not a choice: recommend the connection if there is one, otherwise the script, and ask again. A large account (hundreds of products or campaigns, or a year or more of data) is often more reliable through the script, because a connection can return results too big to handle.
 
 If the connection can see several accounts, ask which one. Never guess an account.
 
 ## Step 3 — Get the data
 
-**Route 1, a Google Ads connection.** Run every query in `references/queries.md` with the dates from Step 1, plus the `account_info` query, and save each result as `<run>/raw/<query name>.json`, complete. If a result is too large to show, use the file the connection saved instead; never copy rows out by hand. Then:
+**A Google Ads connection.** Run every query in `references/queries.md` with the dates from Step 1, plus the `account_info` query, and save each result as `<run>/raw/<query name>.json`, complete. If a result is too large to show, use the file the connection saved instead; never copy rows out by hand. Then:
 
 ```
 python3 <skill-dir>/scripts/audittool.py load <store>-audit/raw --run <store>-audit --from <start> --to <end>
 ```
 
-**Route 2, the Google Ads Script.** Write the script with the dates filled in:
+**The Google Ads Script.** Write the script with the dates filled in:
 
 ```
 python3 <skill-dir>/scripts/audittool.py script --from <start> --to <end> [--customer-id 123-456-7890] --out google-ads-audit-export.js
@@ -86,7 +88,14 @@ If the user says a menu has moved, point them to Google's help for "Google Ads s
 python3 <skill-dir>/scripts/audittool.py load <file> --run <store>-audit
 ```
 
-**Route 3, demo data.** `load <skill-dir>/examples/demo-data.json --run loma-audit`, then `planner <skill-dir>/examples/demo-keyword-planner.csv --run loma-audit --market "United Kingdom"`. Say plainly that every number is made up.
+**Demo data.** Use the run folder `loma-audit` and the store name "Loma Studio (demo)". Say plainly that it is a fictional store and every number is made up.
+
+```
+python3 <skill-dir>/scripts/audittool.py load <skill-dir>/examples/demo-data.json --run loma-audit
+python3 <skill-dir>/scripts/audittool.py planner <skill-dir>/examples/demo-keyword-planner.csv --run loma-audit --market "United Kingdom" --language English
+```
+
+For the demo, skip the store-name question and Step 5 (its Keyword Planner file is loaded above), unless the user asks.
 
 `load` prints the rows per query, any query that is missing or failed, and which tab that affects. Report missing pieces to the user. Only `campaigns_daily` is essential. Never invent data to fill a gap: a tab without its data is left out.
 
@@ -97,7 +106,7 @@ Ask once, in one message, and use the defaults if the user doesn't know or doesn
 - **Gross margin** (default 50%): the average share of revenue left after product costs. It drives gross profit after ad spend on the Account tab and Profit and POAS on the product tabs. Break-even ROAS is 1 ÷ margin (2.0 at 50%).
 - **ROAS threshold** (default 400%) and **cost threshold** (default 50 in the account's currency): a product with at least the cost threshold is Profitable at or above the ROAS threshold and Costly below it. Below the cost threshold it is Low spend; with no spend at all it is a Zombie.
 - **Product family thresholds** default to the same. A family adds up several products' spend, so a higher cost threshold (for example double) often suits it.
-- **Store name and website** for the titles. The account name and the store's domain are fine.
+- **Store name and website** for the titles. The account name is fine for the store; the website is optional.
 
 ## Step 5 — Search Volume (optional)
 
@@ -122,11 +131,11 @@ It groups product IDs into families: by the Shopify product ID when the IDs carr
 ## Step 7 — Build
 
 ```
-python3 <skill-dir>/scripts/audittool.py build --run <store>-audit --store "<Store name>" --domain <domain> \
+python3 <skill-dir>/scripts/audittool.py build --run <store>-audit --store "<Store name>" [--domain <domain>] \
     --margin 0.5 --roas 4 --cost 50 [--family-roas 4 --family-cost 100]
 ```
 
-It prints the headline numbers (also saved to `summary.json`), the tabs built and any warnings. Read every warning and pass the relevant ones on: for example, spend on a network type Google doesn't name is counted in "Cross-network & other" so totals still add up.
+It prints the headline numbers, the tabs built and any warnings, and saves them to `summary.json` together with every month of the Account tab (gross profit after ad spend and impression share included), the Search Volume comparisons, the top campaigns and lists of Costly, Profitable and promising Low spend products. Use `summary.json` for the chat summary: the workbook's formulas only show values once Google Sheets or Excel opens it. Read every warning and pass the relevant ones on: for example, spend on a network type Google doesn't name is counted in "Cross-network & other" so totals still add up.
 
 Sense-check before delivering: an account with real Shopping spend should never come back with every product a Zombie, and the PMax + Shopping cost should not be more than the whole account's cost.
 
@@ -135,7 +144,7 @@ Sense-check before delivering: an account with real Shopping spend should never 
 Give the user:
 
 1. The workbook's path, and how to open it in Google Sheets: upload it to Google Drive, open it, then **File > Save as Google Sheets**, and work in that copy. (In Google Sheets, File > Import > Upload also works.) It opens in Excel as it is. If this session has a Google Drive connection that can upload a file and convert it to Google Sheets, offer to do it.
-2. The headline numbers, in three to six lines, from `summary.json`.
+2. The headline numbers, in three to six lines, from `summary.json`. With the demo data, start by saying it is a fictional store.
 3. What stands out, in three to five points, each tied to a tab and a real number. `references/reading-the-report.md` says what to look for on each tab. Only state numbers the data contains; label anything else as a question to check.
 4. How to use it: the cream cells are dropdowns and editable settings, and the hidden tabs hold the data the formulas read.
 5. A privacy note: the workbook holds their account data, so check who it is shared with.

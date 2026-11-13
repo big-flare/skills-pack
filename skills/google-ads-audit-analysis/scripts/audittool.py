@@ -647,8 +647,8 @@ def cmd_families(a):
     out({"saved": path, "products": len(products), "families": len(fam),
          "single_product_families": sum(1 for v in fam.values() if len(v) == 1),
          "grouped_by": rules,
-         "top_families_by_cost": [{"family": k, "products": len(v), "sample_titles": [x["title"] for x in v[:3]]}
-                                  for k, v in biggest],
+         "top_families_by_cost": [{"family": k, "products": len(v), "cost": round(sum(cost[pkey(x["product_id"])] for x in v), 2),
+                                   "sample_titles": [x["title"] for x in v[:3]]} for k, v in biggest],
          "next": "Check the families read as real products. Edit the family column in the CSV to merge or split, then build."})
 
 
@@ -1147,7 +1147,8 @@ def tab_search_volume(bk, sv):
         ("   ·   %s" % sv["language"] if sv["language"] else "") + "   ·   %d keywords" % len(kws)
     bk.banner(ws, "%s — Search Volume by Month" % bk.store, bk.subtitle(scope), min(width, 12))
     ws.set(3, 0, "Is the market growing or shrinking? Monthly Google searches for the keywords below, next to the impressions "
-           "the account was eligible for. Unfinished months are left blank.", s["hint"])
+           "the account was eligible for. Months without a complete figure are blank: the current month, months Keyword Planner "
+           "hasn't published, and months before June 2025, when Google didn't split Performance Max by network.", s["hint"])
     ws.set(4, 0, "Eligible impressions = the account's Google Search impressions ÷ its search impression share. They also move "
            "when campaigns start, stop or change targeting, so read searches for demand.", s["hint"])
     r0 = 6
@@ -1822,6 +1823,26 @@ def cmd_build(a):
             facts.append(("Cost, %s vs a year earlier" % span, yoy(cc, pc), None))
             summary["year_on_year"] = {"months": span, "conv_value": round(cv, 2), "conv_value_prior": round(pv, 2),
                                        "cost": round(cc, 2), "cost_prior": round(pc, 2)}
+    if acct:
+        def acct_row(label, x):
+            gp = x["val_ct"] * a.margin - x["cost"]
+            return {"period": label, "conversions": round(x["conv"], 2), "cost": round(x["cost"], 2), "conv_value": round(x["val"], 2),
+                    "roas": round(safe_div(x["val"], x["cost"]), 2), "conv_value_by_conv_time": round(x["val_ct"], 2),
+                    "gross_profit_after_ad_spend": round(gp, 2),
+                    "search_impression_share": None if x["is"] is None else ("< 10%" if abs(x["is"] - IS_SENTINEL) < 1e-9 else round(x["is"], 4)),
+                    "lost_is_rank": None if x["rank"] is None else round(x["rank"], 4),
+                    "lost_is_budget": None if x["budget"] is None else round(x["budget"], 4)}
+        summary["account"] = {"gross_margin": a.margin,
+                              "months": [acct_row(month_label(m), x) for m, x in acct["months"]],
+                              "totals": [acct_row(v, acct["totals"][v]) for v in VIEWS]}
+    if sv:
+        summary["search_volume"] = {"keywords": sv["keywords"], "market": sv["market"], "complete_through": month_label(sv["complete"]),
+                                    "comparisons": [{"name": c["name"], "prior": c["prior"], "current": c["current"],
+                                                     "rows": [{"metric": r[0], "prior": None if r[1] is None else round(r[1]),
+                                                               "current": None if r[2] is None else round(r[2]),
+                                                               "change": None if r[3] is None else round(r[3], 3)} for r in c["rows"]]}
+                                                    for c in sv["comparisons"]],
+                                    "monthly_total_searches": {month_label(m): sv["total"](m) for m in sv["months"] if sv["total"](m) is not None}}
     fam_items, fam_rows = [], []
     if products:
         for p in products:
@@ -1841,8 +1862,10 @@ def cmd_build(a):
                                "buckets": {b: {"products": counts[b], "cost": round(bcost[b], 2)} for b in BUCKETS},
                                "top_costly_by_cost": [brief(p) for p in products if p["bucket"] == "Costly"][:8],
                                "top_profitable_by_cost": [brief(p) for p in products if p["bucket"] == "Profitable"][:8],
-                               "low_spend_with_best_roas": [brief(p) for p in sorted((p for p in products if p["bucket"] == "Low spend" and p["val"] > 0),
-                                                                                    key=lambda p: -p["roas"])][:8]}
+                               "low_spend_above_roas_target": [brief(p) for p in sorted((p for p in products if p["bucket"] == "Low spend" and p["roas"] >= a.roas),
+                                                                                       key=lambda p: -p["roas"])][:8],
+                               "break_even_roas": round(safe_div(1, a.margin), 2) if a.margin else None,
+                               "costly_below_break_even": sum(1 for p in products if p["bucket"] == "Costly" and a.margin and p["roas"] < 1 / a.margin)}
         summary["campaigns"] = [{"name": c["name"], "type": TYPE_LABEL.get(c["type"], c["type"]), "cost": round(c["total"]["cost"], 2),
                                  "conv_value": round(c["total"]["val"], 2), "roas": round(safe_div(c["total"]["val"], c["total"]["cost"]), 2)}
                                 for c in camps[:15]]
@@ -1919,7 +1942,7 @@ def cmd_build(a):
     slug = re.sub(r"[^a-z0-9]+", "-", store.lower()).strip("-") or "account"
     path = a.out or os.path.join(a.run, "%s-google-ads-audit.xlsx" % slug)
     bk.wb.save(path)
-    summary["tabs"] = tabs_built
+    summary["tabs"] = ["Start Here"] + [t for x in tabs_built for t in ([x, "Product Mapping"] if x == "Product Families" else [x])]
     summary["file"] = os.path.abspath(path)
     summary["warnings"] = warnings
     with open(os.path.join(a.run, "summary.json"), "w", encoding="utf-8") as f:

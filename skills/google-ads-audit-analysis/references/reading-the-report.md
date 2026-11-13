@@ -21,7 +21,7 @@ Work through the tabs in this order. It goes from the whole account down to sing
 ## 3. Channel Split: where Performance Max spend really goes
 
 - **Shopping ads' share of PMax + Shopping spend.** For an ecommerce account, Shopping is usually where the profitable sales are. A large share going to YouTube, Display (Google Display Network), Gmail or Discover is worth questioning when those channels' ROAS is well below Shopping's.
-- Compare ROAS by channel, not just cost. A channel with a small share of spend and a weak ROAS is less urgent than a big one.
+- Compare ROAS by channel, not just cost. A channel with a small share of spend and a weak ROAS is less urgent than a big one. Maps is usually zero; "Cross-network & other" holds Performance Max spend Google reported without a network (before June 2025) and any network type the report doesn't name.
 - Switch the filter to **PMax only** to see Performance Max without standard Shopping, and to **Whole Account** to see every campaign type by the same channels.
 - Many asset groups with heavy video and image spend and weak returns often point to a Performance Max campaign that could be run as a Shopping-focused one (for example a feed-only asset group, with no text, images or video). Put that to the user as an option to test, not a rule.
 
@@ -32,9 +32,9 @@ Work through the tabs in this order. It goes from the whole account down to sing
 
 ## 5. Products and Product Families: where to cut, where to push
 
-- **Costly** (spend at or above the cost threshold, ROAS below the target): the products losing money or close to it. Check price, stock, reviews and landing page before cutting; then lower their bids, move them to a lower-priority campaign, or exclude them.
+- **Costly** (spend at or above the cost threshold, ROAS below the target): products earning less than the target, not necessarily losing money. Compare each with break-even ROAS (1 ÷ gross margin; `break_even_roas` in `summary.json`): below it they lose money on every sale, above it they make some profit, just less than the target. `costly_below_break_even` counts the loss-makers. Check price, stock, reviews and landing page before cutting; then lower their bids, move them to a lower-priority campaign, or exclude them.
 - **Profitable**: the products to push. If impression share is lost to budget or the ROAS is far above target, there is likely room for more spend.
-- **Low spend**: products Google barely shows. Those with a strong ROAS on their small spend (`low_spend_with_best_roas` in `summary.json`) are the best candidates for their own campaign or a better title and product type.
+- **Low spend**: products Google barely shows. Those already beating the ROAS target on their small spend (`low_spend_above_roas_target` in `summary.json`) are the best candidates for their own campaign or a better title and product type. Small spend means few sales, so treat one good week as a lead, not proof.
 - **Zombies**: listed products with no spend at all. Often a feed problem (titles, product types, disapprovals) or products Google doesn't trust yet. A large Zombie share means a large part of the catalogue isn't working.
 - The **Product Families** tab often tells a different story: a family can be profitable overall while one size or colour is Costly. Look at both.
 - Change the thresholds and margin in the cream cells to see how the buckets move.
